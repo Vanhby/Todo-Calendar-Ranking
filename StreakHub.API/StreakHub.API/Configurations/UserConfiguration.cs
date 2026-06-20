@@ -20,7 +20,7 @@ namespace StreakHub.API.Configurations
             builder.Property(x => x.AvatarUrl).HasMaxLength(255).HasDefaultValue("default.png");
             builder.Property(x => x.Code).HasMaxLength(10);
 
-            builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
+            builder.Property(x => x.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }
 }

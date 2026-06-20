@@ -12,7 +12,7 @@ namespace StreakHub.API.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.IsSent).HasDefaultValue(false);
-            builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
+            builder.Property(x => x.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             builder.HasOne(x => x.Todo)
                    .WithMany(t => t.Reminders)

@@ -13,7 +13,7 @@ namespace StreakHub.API.Configurations
 
             builder.HasIndex(x => x.ShareCode).IsUnique();
             builder.Property(x => x.ShareCode).IsRequired().HasMaxLength(10);
-            builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
+            builder.Property(x => x.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             builder.HasOne(x => x.User)
                    .WithMany(u => u.Shares)

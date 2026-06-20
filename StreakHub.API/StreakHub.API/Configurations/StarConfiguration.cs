@@ -11,7 +11,7 @@ namespace StreakHub.API.Configurations
             builder.ToTable("Stars");
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
+            builder.Property(x => x.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             builder.HasOne(x => x.User)
                    .WithMany(u => u.Stars)
