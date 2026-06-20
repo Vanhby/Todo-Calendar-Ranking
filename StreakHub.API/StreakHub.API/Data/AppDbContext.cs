@@ -15,6 +15,9 @@ namespace StreakHub.API.Data
         public DbSet<Reminder> Reminders { get; set; }
         public DbSet<Share> Shares { get; set; }
         public DbSet<Star> Stars { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<TodoTag> TodoTags { get; set; }
+        public DbSet<ShareTag> ShareTags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
