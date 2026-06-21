@@ -8,6 +8,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IStreakService, StreakService>();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
