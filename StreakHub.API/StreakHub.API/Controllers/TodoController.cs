@@ -32,7 +32,14 @@ namespace StreakHub.API.Controllers
             var taskId = await _todoService.CreateSingleTaskAsync(GetCurrentUserId(), request, today);
             return Ok(new { status = "success", taskId = taskId });
         }
-
+        // [Endpoint 6] Tạo task lặp lại
+        [HttpPost("recurring")]
+        public async Task<IActionResult> CreateRecurringTask([FromBody] TodoRecurringRequest request, [FromQuery] string clientToday)
+        {
+            var today = DateOnly.Parse(clientToday);
+            var count = await _todoService.CreateRecurringTasksAsync(GetCurrentUserId(), request, today);
+            return Ok(new { status = "success", generatedCount = count });
+        }
         // 7: Cập nhật Task (Check/Sửa) 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, [FromBody] TodoUpdateRequest request)
@@ -56,6 +63,14 @@ namespace StreakHub.API.Controllers
             var targetDate = DateOnly.Parse(date);
             var tasks = await _todoService.GetTasksByDayAsync(GetCurrentUserId(), targetDate);
             return Ok(tasks);
+        }
+       
+        // [Endpoint 10] Lấy Todo cả tháng
+        [HttpGet("month")]
+        public async Task<IActionResult> GetTasksByMonth([FromQuery] int year, [FromQuery] int month)
+        {
+            var monthlyTasks = await _todoService.GetTasksByMonthAsync(GetCurrentUserId(), year, month);
+            return Ok(monthlyTasks);
         }
     }
 }
