@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StreakHub.API.Data;
+using StreakHub.API.Interfaces;
+using StreakHub.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IStreakService, StreakService>();
+builder.Services.AddScoped<IShareService, ShareService>();
 
 builder.Services.AddOpenApi();
 
