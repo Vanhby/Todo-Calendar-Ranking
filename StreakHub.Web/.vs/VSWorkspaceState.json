@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\css",
+    "\\js",
+    "\\js\\api"
   ],
-  "SelectedNode": "\\css",
+  "SelectedNode": "\\js\\api\\calendarApi.js",
   "PreviewInSolutionExplorer": false
 }
