@@ -63,14 +63,10 @@ namespace StreakHub.API.Services
             // 4. Lưu toàn bộ thay đổi xuống database dưới dạng một Transaction an toàn
             await _context.SaveChangesAsync();
 
-            // 5. Đếm lại tổng số lượng sao hiện tại của bài share này để Frontend đồng bộ realtime
-            int totalStars = await _context.Stars.CountAsync(x => x.ShareId == shareId);
-
-            // 6. Đóng gói kết quả vào DTO để trả về lớp trên
+            // 5. Đóng gói kết quả vào DTO để trả về lớp trên
             return new StarDTO
             {
                 IsStarred = isStarred,
-                TotalStars = totalStars,
                 Message = message
             };
         }
