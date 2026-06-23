@@ -6,14 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace StreakHub.API.Services
 {
-    public class RankingService : IStarService
+    public class StarService : IStarService
     {
         private readonly AppDbContext _context;
 
-        public RankingService(AppDbContext context)
+        public StarService(AppDbContext context)
         {
             _context = context;
         }
+
 
         public async Task<StarDTO> ToggleStarAsync(int currentUserId, int shareId)
         {

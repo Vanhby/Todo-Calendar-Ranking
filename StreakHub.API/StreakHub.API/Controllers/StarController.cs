@@ -6,11 +6,11 @@ namespace StreakHub.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RankingController : ControllerBase
+    public class StarController : ControllerBase
     {
         private readonly IStarService _starService;
 
-        public RankingController(IStarService starService)
+        public StarController(IStarService starService)
         {
             _starService = starService;
         }
@@ -22,7 +22,8 @@ namespace StreakHub.API.Controllers
             try
             {
                 // Hàm giả định trích xuất thông tin UserId từ chuỗi Token JWT khi đăng nhập
-                int currentUserId = GetUserIdFromToken();
+                //int currentUserId = GetUserIdFromToken();
+                int currentUserId = 1;
 
                 // Gọi lớp dịch vụ tính toán xử lý logic
                 var result = await _starService.ToggleStarAsync(currentUserId, shareId);
@@ -35,13 +36,6 @@ namespace StreakHub.API.Controllers
                 // Trả về Status 400 Bad Request kèm thông báo lỗi logic (VD: Tự thả sao chính mình)
                 return BadRequest(new { message = ex.Message });
             }
-        }
-
-        private int GetUserIdFromToken()
-        {
-            // Logic đọc claim "NameIdentifier" hoặc "id" trong JWT token để trả về số INT nguyên bản
-            // (Bạn áp dụng cách viết hàm bổ trợ mà team bạn đã thống nhất ở các Controller trước)
-            return 1;
         }
     }
 }
