@@ -2,7 +2,6 @@
 using StreakHub.API.Data;
 using StreakHub.API.DTOs;
 using StreakHub.API.Models;
-using static StreakHub.API.DTOs.TodoDTOs;
 
 namespace StreakHub.API.Services
 {
@@ -15,10 +14,10 @@ namespace StreakHub.API.Services
             _context = context;
         }
 
-        //5: Tạo 1 task mới 
+        // Endpoint 7: Tạo task mới (Lưu kèm mảng TagIds)
         public async Task<int> CreateSingleTaskAsync(int userId, TodoCreateRequest request, DateOnly clientToday)
         {
-            var taskDate = DateOnly.Parse(request.Date);
+            var taskDate = DateOnly.Parse(request.TaskDate);
             if (taskDate < clientToday)
             {
                 throw new Exception("Không cho phép thêm Todo với TaskDate nằm trong quá khứ");
@@ -30,25 +29,33 @@ namespace StreakHub.API.Services
                 Title = request.Title,
                 TaskDate = taskDate,
                 IsCompleted = false,
-                CreatedAt = DateTime.UtcNow // Luôn dùng UtcNow
+                CreatedAt = DateTime.UtcNow
             };
+
+            // Lưu danh sách Tag vào bảng trung gian
+            if (request.TagIds != null && request.TagIds.Any())
+            {
+                foreach (var tagId in request.TagIds)
+                {
+                    newTodo.TodoTags.Add(new TodoTag { TagId = tagId });
+                }
+            }
 
             _context.Todos.Add(newTodo);
             await _context.SaveChangesAsync();
             return newTodo.Id;
         }
-        // 6 Tạo task lặp lại (Ví dụ gen ra 12 task cho 12 tuần)
+
+        // 8: Tạo task lặp lại
         public async Task<int> CreateRecurringTasksAsync(int userId, TodoRecurringRequest request, DateOnly clientToday)
         {
             var newTodos = new List<Todo>();
             var currentDate = clientToday;
             int generatedCount = 0;
 
-            // Tách chuỗi Pattern (VD: "WEEKLY_TUE" -> "WEEKLY" và "TUE")
             var parts = request.Pattern.Split('_');
             if (parts.Length == 2 && parts[0] == "WEEKLY")
             {
-                // Xác định thứ trong tuần cần tạo
                 DayOfWeek targetDay = parts[1] switch
                 {
                     "MON" => DayOfWeek.Monday,
@@ -61,20 +68,18 @@ namespace StreakHub.API.Services
                     _ => throw new Exception("Pattern không hợp lệ")
                 };
 
-                // Lặp ngày hiện tại tiến lên phía trước cho đến khi gặp đúng Thứ đó
                 while (currentDate.DayOfWeek != targetDay)
                 {
                     currentDate = currentDate.AddDays(1);
                 }
 
-                // Tạo sẵn 12 task cho 12 tuần liên tiếp (Tương đương 3 tháng)
                 for (int i = 0; i < 12; i++)
                 {
                     newTodos.Add(new Todo
                     {
                         UserId = userId,
                         Title = request.Title,
-                        TaskDate = currentDate.AddDays(i * 7), // Cộng thêm 7 ngày mỗi vòng lặp
+                        TaskDate = currentDate.AddDays(i * 7),
                         IsCompleted = false,
                         CreatedAt = DateTime.UtcNow
                     });
@@ -86,12 +91,13 @@ namespace StreakHub.API.Services
             }
             else
             {
-                throw new Exception("Hệ thống hiện tại chỉ hỗ trợ chu kỳ WEEKLY_XXX");
+                throw new Exception("Chỉ hỗ trợ chu kỳ WEEKLY_XXX");
             }
 
             return generatedCount;
         }
-        //  7: Cập nhật Task 
+
+        // 9: Cập nhật Task
         public async Task UpdateTaskAsync(int todoId, int userId, TodoUpdateRequest request)
         {
             var todo = await _context.Todos.FirstOrDefaultAsync(t => t.Id == todoId && t.UserId == userId);
@@ -102,7 +108,7 @@ namespace StreakHub.API.Services
             await _context.SaveChangesAsync();
         }
 
-        //8: Xóa Task 
+        // 10: Xóa Task
         public async Task DeleteTaskAsync(int todoId, int userId)
         {
             var todo = await _context.Todos.FirstOrDefaultAsync(t => t.Id == todoId && t.UserId == userId);
@@ -112,49 +118,36 @@ namespace StreakHub.API.Services
             await _context.SaveChangesAsync();
         }
 
-        //9: Lấy Todo trong 1 ngày 
+        // 11: Lấy Todo theo ngày (Kéo theo Tags)
         public async Task<List<TodoResponse>> GetTasksByDayAsync(int userId, DateOnly date)
         {
             return await _context.Todos
+                .Include(t => t.TodoTags)
+                    .ThenInclude(tt => tt.Tag) // Kéo dữ liệu từ bảng Tag thật
                 .Where(t => t.UserId == userId && t.TaskDate == date)
                 .Select(t => new TodoResponse
                 {
                     Id = t.Id,
                     Title = t.Title,
-                    IsCompleted = t.IsCompleted
+                    IsCompleted = t.IsCompleted,
+                    Tags = t.TodoTags.Select(tt => new TagDTO
+                    {
+                        Id = tt.Tag.Id,
+                        Name = tt.Tag.Name
+                    }).ToList()
                 }).ToListAsync();
         }
-        
 
-        // [Endpoint 10] Lấy Todo cả tháng (Gom nhóm theo ngày)
-        public async Task<Dictionary<string, List<TodoResponse>>> GetTasksByMonthAsync(int userId, int year, int month)
+        // 12: Lấy DS Nhãn (Tags)
+        public async Task<List<TagDTO>> GetAllTagsAsync()
         {
-            // Lấy toàn bộ task của user trong tháng đó
-            var tasks = await _context.Todos
-                .Where(t => t.UserId == userId && t.TaskDate.Year == year && t.TaskDate.Month == month)
-                .Select(t => new
+            return await _context.Tags
+                .Select(t => new TagDTO
                 {
-                    t.Id,
-                    t.Title,
-                    t.TaskDate,
-                    t.IsCompleted
-                })
-                .ToListAsync();
-
-            // Dùng LINQ để gom nhóm (Group By) trên RAM theo chuẩn chuỗi "yyyy-MM-dd"
-            var groupedTasks = tasks
-                .GroupBy(t => t.TaskDate.ToString("yyyy-MM-dd"))
-                .ToDictionary(
-                    g => g.Key,
-                    g => g.Select(t => new TodoResponse
-                    {
-                        Id = t.Id,
-                        Title = t.Title,
-                        IsCompleted = t.IsCompleted
-                    }).ToList()
-                );
-
-            return groupedTasks;
+                    Id = t.Id,
+                    Name = t.Name,
+                    Color = t.Color 
+                }).ToListAsync();
         }
     }
 }
