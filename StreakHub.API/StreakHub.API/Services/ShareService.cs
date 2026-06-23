@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using StreakHub.API.Data;
 using StreakHub.API.DTOs;
 using StreakHub.API.Models;
-using System;
-using System.Threading.Tasks;
-using static StreakHub.API.DTOs.ShareDTO;
 
 namespace StreakHub.API.Services
 {
@@ -19,21 +19,22 @@ namespace StreakHub.API.Services
 
         public async Task<ShareResponseDTO?> GetShareByIdAsync(int id)
         {
-            var share = await _context.Shares
-                .FirstOrDefaultAsync(s => s.Id == id);
+            // Dùng .Select để tối ưu. EF Core sẽ tự dịch s.Stars.Count thành câu lệnh COUNT() trong SQL.
+            var shareDTO = await _context.Shares
+                .Where(s => s.Id == id)
+                .Select(s => new ShareResponseDTO
+                {
+                    Id = s.Id,
+                    UserId = s.UserId,
+                    TargetDate = s.TargetDate,
+                    ShareCode = s.ShareCode,
+                    CreatedAt = s.CreatedAt,
+                    Title = s.Title,
+                    TotalStars = s.Stars.Count // Đếm tổng số sao dựa vào ICollection<Star> của Model
+                })
+                .FirstOrDefaultAsync();
 
-            if (share == null) return null;
-
-            // Mapping sang DTO trước khi trả về, tránh lộ Entity Model
-            return new ShareResponseDTO
-            {
-                Id = share.Id,
-                UserId = share.UserId,
-                TargetDate = share.TargetDate,
-                ShareCode = share.ShareCode,
-                CreatedAt = share.CreatedAt,
-                Title = share.Title
-            };
+            return shareDTO;
         }
 
         public async Task<ShareResponseDTO> CreateShareAsync(ShareCreateDTO dto)
@@ -57,7 +58,8 @@ namespace StreakHub.API.Services
                 TargetDate = share.TargetDate,
                 ShareCode = share.ShareCode,
                 CreatedAt = share.CreatedAt,
-                Title = share.Title
+                Title = share.Title,
+                TotalStars = 0 // Bài viết mới tạo mặc định sẽ có 0 sao
             };
         }
 

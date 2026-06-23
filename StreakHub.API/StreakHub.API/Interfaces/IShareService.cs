@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using static StreakHub.API.DTOs.ShareDTO;
+using StreakHub.API.DTOs;
 
 namespace StreakHub.API.Services
 {
