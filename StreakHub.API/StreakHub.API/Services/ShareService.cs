@@ -1,8 +1,10 @@
-﻿using StreakHub.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using StreakHub.API.Data;
 using StreakHub.API.DTOs;
-using StreakHub.API.Interfaces;
 using StreakHub.API.Models;
-using static StreakHub.API.DTOs.ShareCalendarDTO;
+using System;
+using System.Threading.Tasks;
+using static StreakHub.API.DTOs.ShareDTO;
 
 namespace StreakHub.API.Services
 {
@@ -15,53 +17,57 @@ namespace StreakHub.API.Services
             _context = context;
         }
 
-        public async Task<ShareResponseDTO> CreateShareAsync(int userId, ShareCalendarDTO dto)
+        public async Task<ShareResponseDTO?> GetShareByIdAsync(int id)
         {
-            // 1. Sinh mã ShareCode ngẫu nhiên (ví dụ: chuỗi 8 ký tự)
-            string generatedCode = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
+            var share = await _context.Shares
+                .FirstOrDefaultAsync(s => s.Id == id);
 
-            // 2. Tạo Entity để lưu xuống DB
-            var newShare = new Share
-            {
-                UserId = userId,
-                TargetDate = dto.TargetDate, // Lấy từ DTO do Frontend truyền lên
-                ShareCode = generatedCode,
-                CreatedAt = DateTime.UtcNow  // TUYỆT ĐỐI tuân thủ Luật 1: Dùng UtcNow
-            };
+            if (share == null) return null;
 
-            _context.Shares.Add(newShare);
-            await _context.SaveChangesAsync();
-
-            // 3. Đóng gói Entity thành DTO để trả về
+            // Mapping sang DTO trước khi trả về, tránh lộ Entity Model
             return new ShareResponseDTO
             {
-                ShareCode = newShare.ShareCode,
-                TargetDate = newShare.TargetDate,
-                CreatedAt = newShare.CreatedAt
+                Id = share.Id,
+                UserId = share.UserId,
+                TargetDate = share.TargetDate,
+                ShareCode = share.ShareCode,
+                CreatedAt = share.CreatedAt,
+                Title = share.Title
             };
         }
 
-        public async Task<bool> DeleteShareAsync(int userId, int shareId)
+        public async Task<ShareResponseDTO> CreateShareAsync(ShareCreateDTO dto)
         {
-            // 1. Tìm bản ghi Share trong DB dựa vào Id
-            var share = await _context.Shares.FindAsync(shareId);
-
-            // 2. Nếu không tồn tại thì báo lỗi
-            if (share == null)
+            var share = new Share
             {
-                throw new Exception("Không tìm thấy lịch trình chia sẻ này.");
-            }
+                UserId = dto.UserId,
+                Title = dto.Title,
+                TargetDate = dto.TargetDate, // Lưu thẳng DateOnly từ Frontend gửi lên (Luật 2)
+                ShareCode = dto.ShareCode,
+                CreatedAt = DateTime.UtcNow // LUẬT 1: Cấm dùng DateTime.Now, ép dùng UtcNow chuẩn quốc tế
+            };
 
-            // 3. BẢO MẬT: Kiểm tra xem người đang gọi API có phải là chủ sở hữu không
-            if (share.UserId != userId)
-            {
-                throw new Exception("Bạn không có quyền xóa lịch trình chia sẻ của người khác!");
-            }
-
-            // 4. Xóa khỏi Database
-            _context.Shares.Remove(share);
+            _context.Shares.Add(share);
             await _context.SaveChangesAsync();
 
+            return new ShareResponseDTO
+            {
+                Id = share.Id,
+                UserId = share.UserId,
+                TargetDate = share.TargetDate,
+                ShareCode = share.ShareCode,
+                CreatedAt = share.CreatedAt,
+                Title = share.Title
+            };
+        }
+
+        public async Task<bool> DeleteShareAsync(int id)
+        {
+            var share = await _context.Shares.FindAsync(id);
+            if (share == null) return false;
+
+            _context.Shares.Remove(share);
+            await _context.SaveChangesAsync();
             return true;
         }
     }

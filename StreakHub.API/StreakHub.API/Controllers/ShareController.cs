@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StreakHub.API.DTOs;
-using StreakHub.API.Interfaces;
+using StreakHub.API.Services;
+using static StreakHub.API.DTOs.ShareDTO;
 
 namespace StreakHub.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/shares")]
     public class ShareController : ControllerBase
     {
         private readonly IShareService _shareService;
@@ -15,38 +15,41 @@ namespace StreakHub.API.Controllers
             _shareService = shareService;
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateShare([FromBody] ShareCalendarDTO dto)
+        // GET /api/shares/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetShareById(int id)
         {
-            // Giả sử bạn đã có hàm lấy UserId từ Token (JWT)
-            //int currentUserId = GetUserIdFromToken();
-            int currentUserId = 1;
-
-            var result = await _shareService.CreateShareAsync(currentUserId, dto);
-
-            return Ok(result); // Trả về Status 200 kèm DTO
+            var result = await _shareService.GetShareByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound(new { message = $"Không tìm thấy bài viết với Id = {id}" });
+            }
+            return Ok(result);
         }
 
+        // POST /api/shares
+        [HttpPost]
+        public async Task<IActionResult> CreateShare([FromBody] ShareCreateDTO dto)
+        {
+            if (dto == null)
+            {
+                return BadRequest(new { message = "Dữ liệu yêu cầu không hợp lệ." });
+            }
+
+            var result = await _shareService.CreateShareAsync(dto);
+            return Ok(result);
+        }
+
+        // DELETE /api/shares/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShare(int id)
         {
-            try
+            var isDeleted = await _shareService.DeleteShareAsync(id);
+            if (!isDeleted)
             {
-                // Lấy UserId của người đang đăng nhập từ thẻ bài JWT
-                //int currentUserId = GetUserIdFromToken();
-                int currentUserId = 1;
-
-                // Truyền sang Service xử lý
-                var isDeleted = await _shareService.DeleteShareAsync(currentUserId, id);
-
-                // Trả về DTO thông báo thành công (Tuân thủ Quy tắc Dữ liệu)
-                return Ok(new { message = "Xóa lịch chia sẻ thành công!" });
+                return BadRequest(new { message = "Xóa thất bại. Bài viết không tồn tại hoặc đã bị xóa trước đó." });
             }
-            catch (Exception ex)
-            {
-                // Trả về lỗi 400 nếu có bất kỳ lỗi logic nào xảy ra (Ví dụ: không chính chủ)
-                return BadRequest(new { message = ex.Message });
-            }
+            return Ok(new { message = "Xóa bài viết thành công." });
         }
     }
 }

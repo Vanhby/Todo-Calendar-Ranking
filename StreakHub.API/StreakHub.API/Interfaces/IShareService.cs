@@ -1,11 +1,12 @@
-﻿using StreakHub.API.DTOs;
-using static StreakHub.API.DTOs.ShareCalendarDTO;
+﻿using System.Threading.Tasks;
+using static StreakHub.API.DTOs.ShareDTO;
 
-namespace StreakHub.API.Interfaces
+namespace StreakHub.API.Services
 {
     public interface IShareService
     {
-        Task<ShareResponseDTO> CreateShareAsync(int userId, ShareCalendarDTO dto);
-        Task<bool> DeleteShareAsync(int userId, int shareId);
+        Task<ShareResponseDTO?> GetShareByIdAsync(int id);
+        Task<ShareResponseDTO> CreateShareAsync(ShareCreateDTO dto);
+        Task<bool> DeleteShareAsync(int id);
     }
 }
