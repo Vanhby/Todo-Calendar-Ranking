@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using StreakHub.API.Data;
 using StreakHub.API.DTOs;
-using StreakHub.API.Interfaces;
 
 namespace StreakHub.API.Services
 {
@@ -14,40 +16,41 @@ namespace StreakHub.API.Services
             _context = context;
         }
 
-        public async Task<List<RankingDTO>> GetTopSharesAsync(string timeFilter, DateOnly clientToday, int topCount = 10)
+        public async Task<IEnumerable<ShareResponseDTO>> GetTrendingSharesAsync(RankingRequestDTO request)
         {
-            // Chuyển đổi clientToday thành mốc thời gian để so sánh với CreatedAt của bảng Stars.
-            DateTime filterDateStart = DateTime.MinValue; // Mặc định là từ trước đến nay (all)
+            var query = _context.Shares.AsQueryable();
 
-            if (timeFilter.ToLower() == "today")
+            // LUẬT 2 & 3: Lọc dựa trên TargetDate và ClientToday từ Frontend
+            if (!string.IsNullOrEmpty(request.Timeframe))
             {
-                // Lấy mốc từ 00:00:00 của ngày hiện tại trên máy client
-                filterDateStart = clientToday.ToDateTime(TimeOnly.MinValue);
-            }
-            else if (timeFilter.ToLower() == "week")
-            {
-                // Lấy mốc từ 7 ngày trước so với máy client
-                filterDateStart = clientToday.AddDays(-7).ToDateTime(TimeOnly.MinValue);
-            }
-
-            var query = await _context.Shares
-                .Include(s => s.User)
-                .Include(s => s.ShareTags).ThenInclude(st => st.Tag)
-                .Select(s => new RankingDTO
+                if (request.Timeframe.ToLower() == "today")
                 {
-                    ShareId = s.Id,
+                    query = query.Where(s => s.TargetDate == request.ClientToday);
+                }
+                else if (request.Timeframe.ToLower() == "week")
+                {
+                    var startOfWeek = request.ClientToday.AddDays(-7);
+                    query = query.Where(s => s.TargetDate >= startOfWeek && s.TargetDate <= request.ClientToday);
+                }
+            }
+            // Nếu Timeframe là "all" thì không Where, lấy toàn bộ
+
+            var trendingShares = await query
+                .OrderByDescending(s => s.Stars.Count) // Ranking dựa trên tổng số sao
+                .Take(request.Limit)
+                .Select(s => new ShareResponseDTO
+                {
+                    Id = s.Id,
+                    UserId = s.UserId,
+                    TargetDate = s.TargetDate,
                     ShareCode = s.ShareCode,
-                    AuthorName = s.User.Username,
-                    // Đếm số lượng sao thỏa mãn điều kiện thời gian (CreatedAt)
-                    TotalStars = s.Stars.Count(star => star.CreatedAt >= filterDateStart),
-                    Tags = s.ShareTags.Select(st => st.Tag.Name).ToList()
+                    CreatedAt = s.CreatedAt,
+                    Title = s.Title,
+                    TotalStars = s.Stars.Count // Tối ưu: EF Core tự dịch thành COUNT() trong SQL
                 })
-                .Where(x => x.TotalStars > 0) // Lọc bỏ những bài 0 sao cho gọn bảng xếp hạng
-                .OrderByDescending(x => x.TotalStars) // Sắp xếp giảm dần theo số sao
-                .Take(topCount) // Lấy ra Top N
                 .ToListAsync();
 
-            return query;
+            return trendingShares;
         }
     }
 }

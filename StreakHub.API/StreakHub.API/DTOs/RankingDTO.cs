@@ -1,13 +1,16 @@
-﻿namespace StreakHub.API.DTOs
-{
-    public class RankingDTO
-    {
-        public int ShareId { get; set; }
-        public string ShareCode { get; set; } = string.Empty;
-        public string AuthorName { get; set; } = string.Empty;
-        public int TotalStars { get; set; }
+﻿using System;
 
-        // Trả về danh sách chuỗi tên nhãn (Tag) cho nhẹ dữ liệu
-        public List<string> Tags { get; set; } = new List<string>();
+namespace StreakHub.API.DTOs
+{
+    public class RankingRequestDTO
+    {
+        // Nhận 3 giá trị: "today", "week", "all"
+        public string Timeframe { get; set; } = "all";
+
+        // LUẬT 3: Ép Frontend truyền "Hôm nay" của họ lên để lọc chính xác
+        public DateOnly ClientToday { get; set; }
+
+        // Số lượng top trending muốn lấy (mặc định Top 10)
+        public int Limit { get; set; } = 10;
     }
 }

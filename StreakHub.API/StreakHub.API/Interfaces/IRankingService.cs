@@ -1,9 +1,11 @@
-﻿using StreakHub.API.DTOs;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using StreakHub.API.DTOs;
 
-namespace StreakHub.API.Interfaces
+namespace StreakHub.API.Services
 {
     public interface IRankingService
     {
-        Task<List<RankingDTO>> GetTopSharesAsync(string timeFilter, DateOnly clientToday, int topCount = 10);
+        Task<IEnumerable<ShareResponseDTO>> GetTrendingSharesAsync(RankingRequestDTO request);
     }
 }
