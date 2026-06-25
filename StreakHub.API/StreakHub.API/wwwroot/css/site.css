@@ -1,0 +1,30 @@
+#login-modal:not(.hidden),
+#task-modal:not(.hidden),
+#reminder-modal:not(.hidden),
+#notifications-panel:not(.hidden) {
+  display: flex;
+}
+
+.tag-coding {
+  border-color: rgba(88, 166, 255, 0.3);
+  background-color: rgba(88, 166, 255, 0.1);
+  color: #58a6ff;
+}
+
+.tag-health {
+  border-color: rgba(210, 168, 255, 0.3);
+  background-color: rgba(210, 168, 255, 0.1);
+  color: #d2a8ff;
+}
+
+.reminder-badge-sent {
+  color: #3fb950;
+}
+
+.reminder-badge-pending {
+  color: #e3b341;
+}
+
+.dnd-active-indicator {
+  box-shadow: 0 0 0 2px #f78166;
+}
