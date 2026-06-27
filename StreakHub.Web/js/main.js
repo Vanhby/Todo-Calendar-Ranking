@@ -152,12 +152,36 @@ function checkDndActive() {
 function applyDnd() {
     const toggle = document.getElementById("dnd-toggle");
     const statusLabel = document.getElementById("dnd-status-label");
-    const timeRow = document.getElementById("dnd-time-row");
+    const timeRow = document.getElementById("dnd-time-selectors") || document.getElementById("dnd-time-row");
 
     if (!toggle) return;
 
     toggle.classList.toggle("on", dndOn);
     toggle.setAttribute("aria-checked", dndOn);
+
+    const circle = toggle.querySelector("span");
+    if (dndOn) {
+        toggle.classList.remove("bg-[#30363d]");
+        toggle.classList.add("bg-[#238636]");
+        if (circle) {
+            circle.classList.remove("translate-x-1", "bg-[#8b949e]");
+            circle.classList.add("translate-x-5", "bg-white");
+        }
+        if (timeRow) {
+            timeRow.classList.remove("opacity-50", "pointer-events-none");
+        }
+    } else {
+        toggle.classList.remove("bg-[#238636]");
+        toggle.classList.add("bg-[#30363d]");
+        if (circle) {
+            circle.classList.remove("translate-x-5", "bg-white");
+            circle.classList.add("translate-x-1", "bg-[#8b949e]");
+        }
+        if (timeRow) {
+            timeRow.classList.add("opacity-50", "pointer-events-none");
+        }
+    }
+
     if (statusLabel) {
         statusLabel.textContent = dndOn ? "ON" : "OFF";
         statusLabel.style.color = dndOn ? "#3fb950" : "#8b949e";
