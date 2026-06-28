@@ -3,9 +3,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using StreakHub.API.Models; // Thay bằng namespace của bạn
 using StreakHub.API.DataToObject;
 using Microsoft.EntityFrameworkCore;
+using StreakHub.API.Models_Generated;
 
 namespace StreakHub.API.Controllers
 {
@@ -13,10 +13,10 @@ namespace StreakHub.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly DataContext _context; // Giả định DBContext của bạn tên DataContext
+        private readonly AppDbContext _context; // Giả định DBContext của bạn tên DataContext
         private readonly IConfiguration _configuration;
 
-        public AuthController(DataContext context, IConfiguration configuration)
+        public AuthController(AppDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
@@ -54,7 +54,7 @@ namespace StreakHub.API.Controllers
         {
             // 1. Tìm user bằng Username hoặc Email
             var user = await _context.Users.FirstOrDefaultAsync(u =>
-                u.Username == request.UsernameOrEmail || u.Email == request.UsernameOrEmail);
+                u.Username == request.Username);
 
             if (user == null)
             {
