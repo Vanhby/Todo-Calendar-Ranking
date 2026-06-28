@@ -1,32 +1,33 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StreakHub.API.DTOs;
-using StreakHub.API.Services;
+using StreakHub.API.Interfaces; 
 using System.Security.Claims;
 
 namespace StreakHub.API.Controllers
 {
-    [Route("api/todos")] 
+    [Route("api/todos")]
     [ApiController]
-    [Authorize]
+    [Authorize] 
     public class TodoController : ControllerBase
     {
-        private readonly TodoService _todoService;
+        private readonly ITodoService _todoService; 
 
-        public TodoController(TodoService todoService)
+        public TodoController(ITodoService todoService) 
         {
             _todoService = todoService;
         }
+
         //private int GetCurrentUserId()
         //{
-        //    return 1; // Tạm fix cứng ID để test luồng Database
+        //    return 1; // BẮT BUỘC: Mở lại dòng này để test luồng database thực tế khi chưa có token đăng nhập
         //}
         private int GetCurrentUserId()
         {
             return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         }
 
-        //  7: Tạo 1 task mới
+        // 7: Tạo 1 task mới
         [HttpPost]
         public async Task<IActionResult> CreateTask([FromBody] TodoCreateRequest request, [FromQuery] string clientToday)
         {
@@ -35,7 +36,7 @@ namespace StreakHub.API.Controllers
             return Ok(new { status = "success", id = taskId });
         }
 
-        //  8: Tạo task lặp lại
+        // 8: Tạo task lặp lại
         [HttpPost("recurring")]
         public async Task<IActionResult> CreateRecurringTask([FromBody] TodoRecurringRequest request, [FromQuery] string clientToday)
         {
@@ -44,7 +45,7 @@ namespace StreakHub.API.Controllers
             return Ok(new { status = "success", count = count });
         }
 
-        //  9: Cập nhật Task
+        // 9: Cập nhật Task
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, [FromBody] TodoUpdateRequest request)
         {
@@ -52,7 +53,7 @@ namespace StreakHub.API.Controllers
             return Ok(new { status = "success" });
         }
 
-        //  10: Xóa Task
+        // 10: Xóa Task
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
@@ -60,12 +61,11 @@ namespace StreakHub.API.Controllers
             return Ok(new { status = "success" });
         }
 
-        //  11: Lấy Todo theo ngày
+        // 11: Lấy Todo theo ngày
         [HttpGet("day")]
-        public async Task<IActionResult> GetTasksByDay([FromQuery] string date)
+        public async Task<IActionResult> GetTasksByDay([FromQuery] DateOnly date) 
         {
-            var targetDate = DateOnly.Parse(date);
-            var tasks = await _todoService.GetTasksByDayAsync(GetCurrentUserId(), targetDate);
+            var tasks = await _todoService.GetTasksByDayAsync(GetCurrentUserId(), date);
             return Ok(tasks);
         }
     }
