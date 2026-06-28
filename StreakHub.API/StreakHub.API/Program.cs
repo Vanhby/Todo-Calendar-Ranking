@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StreakHub.API.Data;
 using StreakHub.API.Interfaces;
+using StreakHub.API.Service;
 using StreakHub.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 
+
+builder.Services.AddScoped<Auth_Service>();
 builder.Services.AddScoped<IStreakService, StreakService>();
 builder.Services.AddScoped<IShareService, ShareService>();
 
@@ -45,6 +48,8 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+app.UseDefaultFiles(); // Tự động nhận diện file index.html làm trang chủ khi gõ localhost
+app.UseStaticFiles();  // Kích hoạt đọc file tĩnh trong wwwroot
 
 app.UseCors("AllowAll");
 

@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Project_TT22\\Todo-Calendar-Ranking\\WebApplication1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C9CCD153-0FF3-19A6-760D-781176EA9E0E}|WebApplication1\\StreakHub.API.csproj|d:\\project_tt22\\todo-calendar-ranking\\webapplication1\\webapplication1\\wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C9CCD153-0FF3-19A6-760D-781176EA9E0E}|WebApplication1\\StreakHub.API.csproj|solutionrelative:webapplication1\\wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "index.html",
+              "DocumentMoniker": "D:\\Project_TT22\\Todo-Calendar-Ranking\\WebApplication1\\WebApplication1\\wwwroot\\index.html",
+              "RelativeDocumentMoniker": "WebApplication1\\wwwroot\\index.html",
+              "ToolTip": "D:\\Project_TT22\\Todo-Calendar-Ranking\\WebApplication1\\WebApplication1\\wwwroot\\index.html",
+              "RelativeToolTip": "WebApplication1\\wwwroot\\index.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-06-28T16:58:55.584Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
