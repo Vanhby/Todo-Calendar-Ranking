@@ -133,5 +133,43 @@ namespace StreakHub.API.Services
         {
             return _readReminders.TryGetValue(reminderId, out var isRead) && isRead;
         }
+
+        public bool CheckReminderTimeValid(string notifyTimeStr, out DateTime notifyTime, out string errorMessage)
+        {
+            notifyTime = DateTime.MinValue;
+
+            if (string.IsNullOrWhiteSpace(notifyTimeStr))
+            {
+                errorMessage = "Thời gian nhắc nhở không được để trống.";
+                return false;
+            }
+
+            if (!DateTime.TryParse(notifyTimeStr, out notifyTime))
+            {
+                errorMessage = "Định dạng thời gian nhắc nhở không hợp lệ.";
+                return false;
+            }
+
+            errorMessage = string.Empty;
+            return true;
+        }
+
+        public bool CheckReminderStatus(DateTime notifyTime, DateTime currentTime, bool isDndActive, out string statusMessage)
+        {
+            if (isDndActive)
+            {
+                statusMessage = "Không gửi thông báo nhắc nhở do người dùng đang ở chế độ DND.";
+                return false;
+            }
+
+            if (notifyTime > currentTime)
+            {
+                statusMessage = "Chưa đến giờ nhắc nhở (tương lai).";
+                return false;
+            }
+
+            statusMessage = "Gửi thông báo nhắc nhở thành công.";
+            return true;
+        }
     }
 }

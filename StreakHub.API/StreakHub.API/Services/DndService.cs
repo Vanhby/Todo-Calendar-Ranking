@@ -72,5 +72,59 @@ namespace StreakHub.API.Services
         {
             return !await IsUserInDndAsync(userId);
         }
+
+        public bool CheckDndTimeValid(string startTimeStr, string endTimeStr, out TimeSpan startTime, out TimeSpan endTime, out string errorMessage)
+        {
+            startTime = TimeSpan.Zero;
+            endTime = TimeSpan.Zero;
+
+            if (string.IsNullOrWhiteSpace(startTimeStr))
+            {
+                errorMessage = "Thời gian bắt đầu không được để trống.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(endTimeStr))
+            {
+                errorMessage = "Thời gian kết thúc không được để trống.";
+                return false;
+            }
+
+            if (!TimeSpan.TryParse(startTimeStr, out startTime))
+            {
+                errorMessage = "Định dạng thời gian bắt đầu không hợp lệ.";
+                return false;
+            }
+
+            if (!TimeSpan.TryParse(endTimeStr, out endTime))
+            {
+                errorMessage = "Định dạng thời gian kết thúc không hợp lệ.";
+                return false;
+            }
+
+            errorMessage = string.Empty;
+            return true;
+        }
+
+        public bool CheckUserDndStatus(bool enabled, TimeSpan startTime, TimeSpan endTime, TimeSpan currentTime, out string statusMessage)
+        {
+            if (!enabled)
+            {
+                statusMessage = "Tính năng DND đang tắt.";
+                return false;
+            }
+
+            bool inDnd = IsTimeInDnd(currentTime, startTime, endTime);
+            if (inDnd)
+            {
+                statusMessage = "Người dùng đang trong trạng thái Không Làm Phiền (DND). Block thông báo.";
+                return true;
+            }
+            else
+            {
+                statusMessage = "Người dùng nằm ngoài thời gian Không Làm Phiền (DND).";
+                return false;
+            }
+        }
     }
 }

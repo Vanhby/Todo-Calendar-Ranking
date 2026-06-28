@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="StreakHub.API/StreakHub.API.csproj" />
+  <Project Path="StreakHub.API.Tests/StreakHub.API.Tests.csproj" />
 </Solution>
