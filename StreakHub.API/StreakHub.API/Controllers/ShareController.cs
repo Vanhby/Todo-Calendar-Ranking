@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StreakHub.API.DTOs;
 using StreakHub.API.Services;
-using static StreakHub.API.DTOs.ShareDTO;
 
 namespace StreakHub.API.Controllers
 {

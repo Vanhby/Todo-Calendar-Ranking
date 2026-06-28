@@ -39,13 +39,16 @@ namespace StreakHub.API.Services
 
         public async Task<ShareResponseDTO> CreateShareAsync(ShareCreateDTO dto)
         {
+            // Tự động generate ShareCode ngẫu nhiên (Lấy 8 ký tự từ mảng Guid và viết hoa)
+            string randomShareCode = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
+
             var share = new Share
             {
                 UserId = dto.UserId,
                 Title = dto.Title,
                 TargetDate = dto.TargetDate, // Lưu thẳng DateOnly từ Frontend gửi lên (Luật 2)
-                ShareCode = dto.ShareCode,
-                CreatedAt = DateTime.UtcNow // LUẬT 1: Cấm dùng DateTime.Now, ép dùng UtcNow chuẩn quốc tế
+                ShareCode = randomShareCode, // Dùng mã ngẫu nhiên vừa tạo
+                CreatedAt = DateTime.UtcNow  // LUẬT 1: Cấm dùng DateTime.Now, ép dùng UtcNow chuẩn quốc tế
             };
 
             _context.Shares.Add(share);
