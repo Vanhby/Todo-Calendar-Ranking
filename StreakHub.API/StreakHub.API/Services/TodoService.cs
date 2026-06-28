@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StreakHub.API.Data;
 using StreakHub.API.DTOs;
+using StreakHub.API.Interfaces;
 using StreakHub.API.Models;
 
 namespace StreakHub.API.Services
 {
-    public class TodoService
+    public class TodoService : ITodoService
     {
         private readonly AppDbContext _context;
 

@@ -8,14 +8,14 @@
         public List<int> TagIds { get; set; } = new();
     }
 
-    //8: POST /api/todos/recurring
+    // 8: POST /api/todos/recurring
     public class TodoRecurringRequest
     {
         public string Title { get; set; } = string.Empty;
         public string Pattern { get; set; } = string.Empty;
     }
 
-    //  9: PUT /api/todos/{id}
+    // 9: PUT /api/todos/{id}
     public class TodoUpdateRequest
     {
         public string Title { get; set; } = string.Empty;
@@ -29,13 +29,5 @@
         public string Title { get; set; } = string.Empty;
         public bool IsCompleted { get; set; }
         public List<TagDTO> Tags { get; set; } = new();
-    }
-
-    // 12 (Lấy danh sách Tag) và gộp vào TodoResponse
-    public class TagDTO
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Color { get; set; } = string.Empty;
     }
 }

@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StreakHub.API.Services;
+using StreakHub.API.Interfaces; 
 
 namespace StreakHub.API.Controllers
 {
-    [Route("api/tags")] // 12
+    [Route("api/tags")]
     [ApiController]
-    [Authorize]
+    [Authorize] 
     public class TagsController : ControllerBase
     {
-        private readonly TodoService _todoService;
+        private readonly ITodoService _todoService; 
 
-        public TagsController(TodoService todoService)
+        public TagsController(ITodoService todoService)
         {
             _todoService = todoService;
         }
