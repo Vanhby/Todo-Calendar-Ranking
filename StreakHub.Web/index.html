@@ -3,307 +3,207 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Explore · StreakHub</title>
+  <title>StreakHub</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="bg-[#0d1117] text-[#c9d1d9] min-h-screen font-sans">
 
+  <!-- Toggle state cho drawer (checkbox hack, không cần JS) -->
+  <input type="checkbox" id="drawer-toggle" class="peer hidden" />
+
+  <!-- Overlay tối phía sau drawer -->
+  <label
+    for="drawer-toggle"
+    class="fixed inset-0 z-30 bg-black/60 opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:pointer-events-auto transition-opacity"
+    aria-hidden="true"
+  ></label>
+
+  <!-- Drawer / Menu dọc bên trái -->
+  <aside
+    class="fixed top-0 left-0 z-40 h-full w-72 bg-[#0d1117] border-r border-[#30363d] -translate-x-full peer-checked:translate-x-0 transition-transform duration-300 overflow-y-auto"
+  >
+    <!-- Header drawer: logo + nút đóng -->
+    <div class="flex items-center justify-between px-4 py-3">
+      <svg height="32" viewBox="0 0 16 16" width="32" class="fill-[#c9d1d9]" aria-hidden="true">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+      </svg>
+      <label for="drawer-toggle" class="p-1 rounded-md hover:bg-[#30363d] cursor-pointer" aria-label="Đóng menu">
+        <svg height="20" viewBox="0 0 16 16" width="20" class="fill-[#c9d1d9]" aria-hidden="true">
+          <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
+        </svg>
+      </label>
+    </div>
+
+    <!-- Nhóm menu chính -->
+    <nav class="px-2 py-2 border-b border-[#30363d]">
+    <!-- Home -->
+    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium hover:bg-[#30363d]">
+        <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true"><path d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.231c0-.532.242-1.035.657-1.367l5.25-4.2Z"></path></svg>
+        Home
+    </a>
+
+    <!-- Settings (icon bánh răng) -->
+    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium hover:bg-[#30363d]">
+        <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true"><path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224.231.114.454.243.668.386.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63.27.385.506.792.704 1.218.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294.016.257.016.515 0 .772-.01.147.039.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.99 7.99 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.103-.303c-.066-.019-.176-.011-.299.071a5.93 5.93 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.289 1.106c-.169.646-.715 1.196-1.458 1.26a8.13 8.13 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.078-.158-.211-.224a5.93 5.93 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a7.99 7.99 0 0 1-.704-1.217c-.315-.675-.111-1.422.364-1.891l.814-.806c.049-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.039-.246-.088-.294l-.814-.806C.635 6.045.431 5.298.746 4.623a7.99 7.99 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.103.303c.066.019.176.011.299-.071.214-.143.437-.272.668-.386.133-.066.193-.158.211-.224l.289-1.106C6.009.645 6.556.095 7.299.031A8.2 8.2 0 0 1 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189-.173.086-.34.183-.5.29-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045-.22.312-.412.644-.573.99-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.081.08-.073.159-.059.19.162.346.353.677.573.989.02.03.085.076.195.046l1.102-.303c.56-.153 1.113-.008 1.53.27.161.107.328.204.501.29.447.222.85.629.997 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.037.137-.146l.289-1.105c.147-.561.549-.967.998-1.189.173-.086.34-.183.5-.29.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045.22-.313.411-.644.573-.99.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.081-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.102.303c-.56.153-1.113.008-1.53-.27a4.44 4.44 0 0 0-.501-.29c-.447-.222-.85-.629-.997-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z"></path></svg>
+        Settings
+    </a>
+
+    <!-- Explore (icon kính thiên văn) -->
+    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium hover:bg-[#30363d]">
+        <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true"><path d="M14.184 1.143C13.581.302 12.41.121 11.594.69L8.32 2.65l-1.045-.467a.75.75 0 0 0-.866.211l-.43.51a2.94 2.94 0 0 0-.661 2.142l-2.81 1.748a.75.75 0 0 0-.302.911l1.288 3.062a.75.75 0 0 0 .956.412l1.59-.612-.633 2.852a.75.75 0 0 0 1.464.325l.879-3.957 1.733-.667.732 4.638a.75.75 0 0 0 1.482-.234l-.815-5.165a2.94 2.94 0 0 0 1.673-1.475l.276-.598a.75.75 0 0 0-.083-.778l-.654-.872 1.59-3.493a1.748 1.748 0 0 0-.696-2.236Z"></path></svg>
+        Explore
+    </a>
+    </nav>
+  </aside>
+
   <!-- Navbar -->
-  <header class="bg-[#161b22] border-b border-[#30363d]">
+  <header class="bg-[#161b22] border-b border-[#30363d] relative z-20">
     <nav class="flex items-center justify-between px-4 py-3 gap-4">
+      <!-- Hamburger + Logo -->
       <div class="flex items-center gap-3">
-        <button class="p-1.5 rounded-md hover:bg-[#30363d]" aria-label="Mở menu">
+        <label for="drawer-toggle" class="p-1.5 rounded-md hover:bg-[#30363d] cursor-pointer" aria-label="Mở menu">
           <svg height="20" viewBox="0 0 16 16" width="20" class="fill-[#c9d1d9]" aria-hidden="true">
             <path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path>
           </svg>
-        </button>
+        </label>
         <svg height="32" viewBox="0 0 16 16" width="32" class="fill-[#c9d1d9]" aria-hidden="true">
           <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
         </svg>
-        <span class="font-semibold text-[#c9d1d9]">Explore</span>
+        <span class="font-semibold text-[#c9d1d9] hidden sm:inline">StreakHub</span>
       </div>
 
-      <div class="flex-1 max-w-md">
-        <input
-          type="text"
-          placeholder="Nhập mã Share..."
-          class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] placeholder-[#6e7681] focus:outline-none focus:border-[#58a6ff]"
-        />
-      </div>
-
-      <div
-        id="reminder-container"
-        class="relative">
-        <button
-          id="bell-btn"
-          class="relative p-2 rounded-md border border-[#30363d] hover:border-[#c9d1d9] focus:outline-none transition-colors" 
-          aria-label="Thông báo"
-        >
-          <svg height="18" viewBox="0 0 16 16" width="18" class="fill-[#c9d1d9]" aria-hidden="true">
-            <path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.359l1.703-2.555A.255.255 0 0 0 3 7.947Z"></path>
-          </svg>
-          <span
-            id="bell-badge"
-            class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#f85149] text-[10px] font-bold text-white ring-2 ring-[#161b22]">0</span>
-        </button>
-
-        <div id="reminder-panel" class="hidden absolute right-0 mt-2 w-80 bg-[#161b22] border border-[#30363d] rounded-md shadow-2xl z-50">
-          <div class="px-4 py-3 border-b border-[#30363d] flex justify-between items-center bg-[#0d1117] rounded-t-md">
-            <span class="text-sm font-semibold text-[#c9d1d9]">Thông báo</span>
-            <button id="mark-all-read-btn" class="text-xs text-[#6e7681] hover:text-[#58a6ff]">Đánh dấu đã đọc</button>
-          </div>
-          <ul id="reminder-list" class="max-h-80 overflow-y-auto">
-             <!-- Reminders will be rendered here dynamically -->
-          </ul>
-          <a href="#" class="block px-4 py-2 text-center text-sm text-[#58a6ff] hover:underline border-t border-[#30363d] rounded-b-md bg-[#0d1117]">
-            Xem tất cả thông báo
-          </a>
-        </div>
-      </div>
+      <!-- Noti -->
+      <button class="p-2 rounded-md border border-[#30363d] hover:border-[#c9d1d9]" aria-label="Thông báo">
+        <svg height="18" viewBox="0 0 16 16" width="18" class="fill-[#c9d1d9]" aria-hidden="true">
+          <path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.359l1.703-2.555A.255.255 0 0 0 3 7.947Z"></path>
+        </svg>
+      </button>
     </nav>
   </header>
 
-  <!-- Layout 3 cột -->
-  <div class="flex flex-col lg:flex-row gap-6 p-6 max-w-screen-2xl mx-auto">
+    <!-- Layout 3 cột -->
+<div class="flex flex-col lg:flex-row gap-6 p-6 max-w-screen-2xl mx-auto">
 
-    <!-- Sidebar trái -->
-    <aside class="w-full lg:w-72 flex-shrink-0">
-      <div 
-       id="user-profile-card"
-       class="bg-[#161b22] border border-[#30363d] rounded-md p-4 mb-4 text-center">
-        <img
-          src="https://avatars.githubusercontent.com/u/9919?v=4"
-          alt="Ảnh đại diện người dùng"
-          class="w-28 h-28 rounded-full border border-[#30363d] mx-auto mb-3"
-        />
-        <p class="text-lg font-semibold text-[#c9d1d9]">Vanhby</p>
+  <!-- Sidebar trái -->
+  <aside class="w-full lg:w-72 flex-shrink-0">
+    <img
+      src="https://avatars.githubusercontent.com/u/9919?v=4"
+      alt="Ảnh đại diện người dùng"
+      class="w-32 h-32 rounded-full border border-[#30363d] mb-4"
+    />
+    <h1 class="text-xl font-semibold text-[#c9d1d9]">Nguyen Van A</h1>
+    <p class="text-[#6e7681] mb-4">@devuser</p>
+
+    <!-- Current Streak -->
+    <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4 flex items-center gap-3 mb-4">
+      <svg height="28" viewBox="0 0 24 24" width="28" class="fill-[#f78166]" aria-hidden="true">
+        <path d="M12 23c4.97 0 9-3.58 9-8 0-2.5-1.5-5.5-3.5-7.5.5 2-1 3-2 3.5 0-3-2-6.5-5-8 .5 4-2 6-3.5 8.5C5.5 8.5 5 10.5 5 12c0 4.42 4.03 11 7 11z"/>
+      </svg>
+      <div>
+        <p class="text-sm text-[#6e7681]">Current Streak</p>
+        <p class="text-lg font-bold text-[#c9d1d9]">12 days</p>
+      </div>
+    </div>
+
+    <!-- Top rated todolists -->
+    <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4">
+      <div class="flex items-center gap-2 mb-3">
+        <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#e3b341]" aria-hidden="true">
+          <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+        </svg>
+        <h2 class="text-sm font-semibold text-[#c9d1d9]">Top Rated Todolists</h2>
       </div>
 
-      <div class="bg-[#161b22] border border-[#30363d] rounded-md divide-y divide-[#30363d]">
-        <a href="#" class="block px-4 py-3 text-sm text-[#58a6ff] hover:underline">0 starred topics</a>
-        <a href="#" class="block px-4 py-3 text-sm text-[#58a6ff] hover:underline">1 starred todolist</a>
-      </div>
+      <ul class="space-y-2">
+        <li class="flex items-center justify-between gap-2 p-2 rounded-md hover:bg-[#30363d]">
+          <span class="text-sm text-[#c9d1d9] truncate">Morning Routine</span>
+          <span class="flex items-center gap-1 text-xs text-[#e3b341] flex-shrink-0">
+            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+            4.9
+          </span>
+        </li>
+        <li class="flex items-center justify-between gap-2 p-2 rounded-md hover:bg-[#30363d]">
+          <span class="text-sm text-[#c9d1d9] truncate">Workout Plan</span>
+          <span class="flex items-center gap-1 text-xs text-[#e3b341] flex-shrink-0">
+            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+            4.7
+          </span>
+        </li>
+        <li class="flex items-center justify-between gap-2 p-2 rounded-md hover:bg-[#30363d]">
+          <span class="text-sm text-[#c9d1d9] truncate">Study English</span>
+          <span class="flex items-center gap-1 text-xs text-[#e3b341] flex-shrink-0">
+            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+            4.5
+          </span>
+        </li>
+        <li class="flex items-center justify-between gap-2 p-2 rounded-md hover:bg-[#30363d]">
+          <span class="text-sm text-[#c9d1d9] truncate">Side Project</span>
+          <span class="flex items-center gap-1 text-xs text-[#e3b341] flex-shrink-0">
+            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+            4.3
+          </span>
+        </li>
+      </ul>
+    </div>
+  </aside>
 
-      <!-- Nhập mã code todo -->
-      <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4 mt-4">
-        <div class="flex items-center gap-2 mb-3">
-          <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true"><path d="M4.72 3.22a.75.75 0 0 1 1.06 1.06L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Zm6.56 0a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.75.75 0 0 1 0-1.06Z"></path></svg>
-          <h2 class="text-sm font-semibold text-[#c9d1d9]">Mở Todolist bằng mã</h2>
-        </div>
-        <input
-          type="text"
-          placeholder="VD: a1b2-c3d4"
-          class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] placeholder-[#6e7681] focus:outline-none focus:border-[#58a6ff] mb-2"
-        />
-        <button class="w-full bg-[#238636] hover:bg-[#2ea043] text-white text-sm font-medium rounded-md px-3 py-1.5">Mở Todolist</button>
-      </div>
+  <!-- Main Content: Lịch (giữ nguyên phần lịch hiện có) -->
+  <main class="flex-1 min-w-0">
+    <div class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
 
-      <!-- Phan DnD -->
-      <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4 mt-4">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-2">
-            <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true">
-              <path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.359l1.703-2.555A.255.255 0 0 0 3 7.947Z"></path>
-            </svg>
-            <h2 class="text-sm font-semibold text-[#c9d1d9]">Do Not Disturb</h2>
-          </div>
-          
-          <button 
-            id="dnd-toggle"
-            class="relative inline-flex h-5 w-9 items-center rounded-full bg-[#30363d] transition-colors focus:outline-none cursor-pointer"
-          >
-            <span class="inline-block h-3.5 w-3.5 translate-x-1 rounded-full bg-[#8b949e] transition-transform duration-200 ease-in-out"></span>
+      <div class="flex items-center justify-between mb-4 gap-2 flex-wrap">
+        <h2 id="cal-title" class="text-base font-semibold text-[#c9d1d9]"></h2>
+        <div class="flex items-center gap-2">
+          <button id="prev-month" class="p-1.5 rounded-md border border-[#30363d] hover:border-[#c9d1d9]" aria-label="Tháng trước">
+            <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
+          </button>
+          <select id="month-select" class="bg-[#0d1117] border border-[#30363d] rounded-md px-2 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff]"></select>
+          <select id="year-select" class="bg-[#0d1117] border border-[#30363d] rounded-md px-2 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff]"></select>
+          <button id="today-btn" class="px-3 py-1.5 rounded-md border border-[#30363d] text-sm text-[#c9d1d9] hover:border-[#c9d1d9]">Hôm nay</button>
+          <button id="next-month" class="p-1.5 rounded-md border border-[#30363d] hover:border-[#c9d1d9]" aria-label="Tháng sau">
+            <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
           </button>
         </div>
-
-        <div id="dnd-time-selectors" class="flex items-center gap-2 opacity-50 pointer-events-none transition-opacity duration-200">
-          <div class="flex-1">
-            <label class="block text-xs text-[#6e7681] mb-1">Từ giờ:</label>
-            <input 
-              id="dnd-start"
-              type="time" 
-              value="22:00"
-              style="color-scheme: dark;"
-              class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-2 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff] cursor-pointer"
-            />
-          </div>
-          
-          <div class="mt-5 text-[#6e7681]">
-            <svg height="14" viewBox="0 0 16 16" width="14" class="fill-current" aria-hidden="true">
-              <path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path>
-            </svg>
-          </div>
-
-          <div class="flex-1">
-            <label class="block text-xs text-[#6e7681] mb-1">Đến giờ:</label>
-            <input 
-              id="dnd-end"
-              type="time" 
-              value="07:00"
-              style="color-scheme: dark;"
-              class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-2 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff] cursor-pointer"
-            />
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Cột giữa: Trending todolists -->
-    <main class="flex-1 min-w-0">
-      <!-- Tabs -->
-      <nav class="flex items-center gap-6 border-b border-[#30363d] mb-6 text-sm overflow-x-auto">
-        <a href="#" class="pb-3 border-b-2 border-[#f78166] font-semibold text-[#c9d1d9] whitespace-nowrap">Explore</a>
-        <a href="#" class="pb-3 text-[#6e7681] hover:text-[#c9d1d9] whitespace-nowrap">Topics</a>
-        <a href="#" class="pb-3 text-[#6e7681] hover:text-[#c9d1d9] whitespace-nowrap">Trending</a>
-        <a href="#" class="pb-3 text-[#6e7681] hover:text-[#c9d1d9] whitespace-nowrap">Collections</a>
-        <a href="#" class="pb-3 text-[#6e7681] hover:text-[#c9d1d9] whitespace-nowrap">Events</a>
-      </nav>
-
-      <h1 class="text-2xl font-semibold text-[#c9d1d9] mb-6">Trending Todolists hôm nay</h1>
-
-      <div class="space-y-4">
-        <!-- Card todolist 1 -->
-        <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
-          <div class="flex items-start justify-between gap-3 mb-2">
-            <div class="flex items-center gap-2">
-              <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
-              <a href="#" class="text-[#58a6ff] font-semibold hover:underline">duclananh / Morning Routine</a>
-            </div>
-            <button class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0">
-              <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-              Star
-            </button>
-          </div>
-          <p class="text-sm text-[#6e7681] mb-3">Thói quen buổi sáng giúp bạn bắt đầu ngày mới hiệu quả: thiền, tập thể dục, đọc sách.</p>
-          <div class="flex items-center gap-4 text-xs text-[#6e7681]">
-            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#39d353] inline-block"></span>Habit</span>
-            <span class="flex items-center gap-1">
-              <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-              4.9
-            </span>
-            <span>2.3k lượt dùng</span>
-          </div>
-        </article>
-
-        <!-- Card todolist 2 -->
-        <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
-          <div class="flex items-start justify-between gap-3 mb-2">
-            <div class="flex items-center gap-2">
-              <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
-              <a href="#" class="text-[#58a6ff] font-semibold hover:underline">minhtri / Workout Plan</a>
-            </div>
-            <button class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0">
-              <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-              Star
-            </button>
-          </div>
-          <p class="text-sm text-[#6e7681] mb-3">Lịch tập luyện 6 ngày/tuần cho người mới: push, pull, legs và cardio xen kẽ.</p>
-          <div class="flex items-center gap-4 text-xs text-[#6e7681]">
-            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#26a641] inline-block"></span>Fitness</span>
-            <span class="flex items-center gap-1">
-              <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-              4.7
-            </span>
-            <span>1.8k lượt dùng</span>
-          </div>
-        </article>
-
-        <!-- Card todolist 3 -->
-        <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
-          <div class="flex items-start justify-between gap-3 mb-2">
-            <div class="flex items-center gap-2">
-              <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
-              <a href="#" class="text-[#58a6ff] font-semibold hover:underline">lan.pham / Study English 90 Days</a>
-            </div>
-            <button class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0">
-              <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-              Star
-            </button>
-          </div>
-          <p class="text-sm text-[#6e7681] mb-3">Lộ trình học tiếng Anh 90 ngày: từ vựng, nghe, nói mỗi ngày một chút.</p>
-          <div class="flex items-center gap-4 text-xs text-[#6e7681]">
-            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#006d32] inline-block"></span>Learning</span>
-            <span class="flex items-center gap-1">
-              <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-              4.6
-            </span>
-            <span>1.2k lượt dùng</span>
-          </div>
-        </article>
       </div>
 
-      <a href="#" class="inline-flex items-center gap-1 mt-4 text-sm text-[#58a6ff] hover:underline">
-        Xem thêm trending todolists
-        <svg height="14" viewBox="0 0 16 16" width="14" class="fill-[#58a6ff]" aria-hidden="true"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-      </a>
-    </main>
-
-    <!-- Cột phải: Trending users -->
-    <aside class="w-full lg:w-80 flex-shrink-0">
-      <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4">
-        <div class="flex items-center gap-2 mb-4">
-          <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#f78166]" aria-hidden="true"><path d="M5.5 3.5a2 2 0 1 1 4 0 2 2 0 0 1-4 0ZM2 13.5a3.5 3.5 0 0 1 7 0v.5H2Z"></path></svg>
-          <h2 class="text-base font-semibold text-[#c9d1d9]">Trending Users <span class="text-[#6e7681] font-normal">today</span></h2>
-        </div>
-
-        <ul class="divide-y divide-[#30363d]">
-          <li class="flex items-center gap-3 py-3">
-            <span class="text-sm font-semibold text-[#6e7681] w-4">1</span>
-            <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="Avatar duclananh" class="w-10 h-10 rounded-full border border-[#30363d]" />
-            <div class="min-w-0 flex-1">
-              <a href="#" class="text-sm text-[#58a6ff] font-semibold hover:underline">duclananh</a>
-              <p class="text-xs text-[#6e7681]">Streak 240 ngày</p>
-            </div>
-            <button class="border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9]">Follow</button>
-          </li>
-          <li class="flex items-center gap-3 py-3">
-            <span class="text-sm font-semibold text-[#6e7681] w-4">2</span>
-            <img src="https://avatars.githubusercontent.com/u/2?v=4" alt="Avatar minhtri" class="w-10 h-10 rounded-full border border-[#30363d]" />
-            <div class="min-w-0 flex-1">
-              <a href="#" class="text-sm text-[#58a6ff] font-semibold hover:underline">minhtri</a>
-              <p class="text-xs text-[#6e7681]">Streak 198 ngày</p>
-            </div>
-            <button class="border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9]">Follow</button>
-          </li>
-          <li class="flex items-center gap-3 py-3">
-            <span class="text-sm font-semibold text-[#6e7681] w-4">3</span>
-            <img src="https://avatars.githubusercontent.com/u/3?v=4" alt="Avatar lan.pham" class="w-10 h-10 rounded-full border border-[#30363d]" />
-            <div class="min-w-0 flex-1">
-              <a href="#" class="text-sm text-[#58a6ff] font-semibold hover:underline">lan.pham</a>
-              <p class="text-xs text-[#6e7681]">Streak 156 ngày</p>
-            </div>
-            <button class="border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9]">Follow</button>
-          </li>
-          <li class="flex items-center gap-3 py-3">
-            <span class="text-sm font-semibold text-[#6e7681] w-4">4</span>
-            <img src="https://avatars.githubusercontent.com/u/4?v=4" alt="Avatar huy.ng" class="w-10 h-10 rounded-full border border-[#30363d]" />
-            <div class="min-w-0 flex-1">
-              <a href="#" class="text-sm text-[#58a6ff] font-semibold hover:underline">huy.ng</a>
-              <p class="text-xs text-[#6e7681]">Streak 132 ngày</p>
-            </div>
-            <button class="border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9]">Follow</button>
-          </li>
-          <li class="flex items-center gap-3 py-3">
-            <span class="text-sm font-semibold text-[#6e7681] w-4">5</span>
-            <img src="https://avatars.githubusercontent.com/u/5?v=4" alt="Avatar trang.vu" class="w-10 h-10 rounded-full border border-[#30363d]" />
-            <div class="min-w-0 flex-1">
-              <a href="#" class="text-sm text-[#58a6ff] font-semibold hover:underline">trang.vu</a>
-              <p class="text-xs text-[#6e7681]">Streak 121 ngày</p>
-            </div>
-            <button class="border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9]">Follow</button>
-          </li>
-        </ul>
-
-        <a href="#" class="inline-flex items-center gap-1 mt-3 text-sm text-[#58a6ff] hover:underline">
-          See more trending users
-          <svg height="14" viewBox="0 0 16 16" width="14" class="fill-[#58a6ff]" aria-hidden="true"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-        </a>
+      <div class="grid grid-cols-7 gap-2 mb-2 text-center text-xs text-[#6e7681]">
+        <span>CN</span><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span>
       </div>
-    </aside>
 
-  </div>
+      <div id="calendar" class="grid grid-cols-7 gap-2"></div>
 
-  <script src="js/main.js"></script>
+      <div class="flex items-center justify-end gap-2 mt-4 text-xs text-[#6e7681]">
+        <span>Less</span>
+        <div class="w-3 h-3 rounded-sm bg-[#161b22] border border-[#30363d]"></div>
+        <div class="w-3 h-3 rounded-sm bg-[#0e4429]"></div>
+        <div class="w-3 h-3 rounded-sm bg-[#006d32]"></div>
+        <div class="w-3 h-3 rounded-sm bg-[#26a641]"></div>
+        <div class="w-3 h-3 rounded-sm bg-[#39d353]"></div>
+        <span>More</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Panel phải: Việc hôm nay -->
+  <aside class="w-full lg:w-80 flex-shrink-0">
+    <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4">
+      <div class="flex items-center justify-between mb-1">
+        <h2 class="text-sm font-semibold text-[#c9d1d9]">Hôm nay</h2>
+        <span id="today-progress" class="text-xs text-[#6e7681]"></span>
+      </div>
+      <p id="today-date" class="text-xs text-[#6e7681] mb-3"></p>
+
+      <!-- Chưa làm (rõ) -->
+      <p class="text-xs font-semibold text-[#6e7681] uppercase tracking-wide mb-2">Chưa làm</p>
+      <ul id="todo-pending" class="space-y-2 mb-4"></ul>
+
+      <!-- Đã làm (mờ) -->
+      <p class="text-xs font-semibold text-[#6e7681] uppercase tracking-wide mb-2">Đã làm</p>
+      <ul id="todo-done" class="space-y-2"></ul>
+    </div>
+  </aside>
+
+</div>
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>
