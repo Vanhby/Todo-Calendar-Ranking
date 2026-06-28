@@ -1,4 +1,6 @@
-﻿namespace StreakHub.API.DataToObject
+﻿
+
+namespace StreakHub.API.DataToObject
 {
     public class RegisterDto
     {

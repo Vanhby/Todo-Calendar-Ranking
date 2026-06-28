@@ -1,106 +1,53 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using StreakHub.API.DataToObject;
-using Microsoft.EntityFrameworkCore;
-using StreakHub.API.Models_Generated;
+using StreakHub.API.Service;
+using System.Threading.Tasks; // Đảm bảo có thư viện này để dùng lớp Task
 
 namespace StreakHub.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _context; // Giả định DBContext của bạn tên DataContext
-        private readonly IConfiguration _configuration;
+        private readonly Auth_Service _authService;
 
-        public AuthController(AppDbContext context, IConfiguration configuration)
+        public AuthController(Auth_Service authService)
         {
-            _context = context;
-            _configuration = configuration;
+            _authService = authService;
         }
 
+        /// <summary>
+        /// Thêm từ khóa 'async' và chuyển đổi trả về thành 'Task<IActionResult>'
+        /// </summary>
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto request)
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            // 1. Kiểm tra xem Username hoặc Email đã tồn tại chưa
-            if (await _context.Users.AnyAsync(u => u.Username == request.Username || u.Email == request.Email))
+            // Thêm từ khóa 'await' - Hệ thống sẽ tự động suy luận (Infer) được kiểu dữ liệu của tuple (isSuccess, statusMessage)
+            var (isSuccess, statusMessage) = await _authService.Register(registerDto);
+
+            if (!isSuccess)
             {
-                return BadRequest("Username hoặc Email đã tồn tại.");
+                return BadRequest(new { Success = false, Message = statusMessage });
             }
 
-            // 2. Hash mật khẩu bằng BCrypt
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-
-            // 3. Tạo User mới
-            var user = new User
-            {
-                Username = request.Username,
-                Email = request.Email,
-                PasswordHash = passwordHash,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return Ok("Đăng ký thành công!");
+            return Ok(new { Success = true, Message = statusMessage });
         }
 
+        /// <summary>
+        /// Thêm từ khóa 'async' và chuyển đổi trả về thành 'Task<IActionResult>'
+        /// </summary>
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto request)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            // 1. Tìm user bằng Username hoặc Email
-            var user = await _context.Users.FirstOrDefaultAsync(u =>
-                u.Username == request.Username);
+            // Thêm từ khóa 'await' tại đây
+            var (isSuccess, statusMessage) = await _authService.Login(loginDto);
 
-            if (user == null)
+            if (!isSuccess)
             {
-                return BadRequest("Tài khoản hoặc mật khẩu không chính xác.");
+                return BadRequest(new { Success = false, Message = statusMessage });
             }
 
-            // 2. Kiểm tra mật khẩu (So sánh Pass thô với PassHash trong DB)
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-            {
-                return BadRequest("Tài khoản hoặc mật khẩu không chính xác.");
-            }
-
-            // 3. Đúng mật khẩu -> Tạo Token JWT trả về cho Client
-            string token = CreateToken(user);
-
-            return Ok(new { Token = token, Message = "Đăng nhập thành công!" });
-        }
-
-        // Hàm helper sinh chuỗi JWT Token
-        private string CreateToken(User user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                _configuration.GetSection("Jwt:Key").Value!));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
-            var token = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(1), // Token có hạn 1 ngày
-                SigningCredentials = creds,
-                Issuer = _configuration.GetSection("Jwt:Issuer").Value,
-                Audience = _configuration.GetSection("Jwt:Audience").Value
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var securityToken = tokenHandler.CreateToken(token);
-
-            return tokenHandler.WriteToken(securityToken);
+            return Ok(new { Success = true, Message = statusMessage });
         }
     }
 }
