@@ -20,8 +20,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IStreakService, StreakService>();
-builder.Services.AddScoped<IShareService, ShareService>();
+builder.Services.AddScoped<IDndService, DndService>();
+builder.Services.AddScoped<IReminderService, ReminderService>();
+builder.Services.AddHostedService<EmailReminderWorker>();
 
 builder.Services.AddOpenApi();
 
@@ -35,6 +36,15 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 var app = builder.Build();
 
 app.UseCors("AllowAll");
@@ -44,7 +54,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseCors("AllowAll");
 
