@@ -20,8 +20,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IStreakService, StreakService>();
-builder.Services.AddScoped<IShareService, ShareService>();
+builder.Services.AddScoped<IDndService, DndService>();
+builder.Services.AddScoped<IReminderService, ReminderService>();
+builder.Services.AddHostedService<EmailReminderWorker>();
 
 builder.Services.AddOpenApi();
 
