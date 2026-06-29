@@ -9,7 +9,6 @@
         public DateTime CreatedAt { get; set; }
         public string Title { get; set; } = string.Empty;
 
-
         public virtual User User { get; set; } = null!;
         public virtual ICollection<Star> Stars { get; set; } = new List<Star>();
         public virtual ICollection<ShareTag> ShareTags { get; set; } = new List<ShareTag>();

@@ -6,7 +6,7 @@ using StreakHub.API.DTOs;
 namespace StreakHub.API.Controllers
 {
     [ApiController]
-    [Route("api/rankings")]
+    [Route("api/[controller]")]
     public class RankingController : ControllerBase
     {
         private readonly IRankingService _rankingService;

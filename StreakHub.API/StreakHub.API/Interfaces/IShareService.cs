@@ -7,6 +7,7 @@ namespace StreakHub.API.Services
     {
         Task<ShareResponseDTO?> GetShareByIdAsync(int id);
         Task<ShareResponseDTO> CreateShareAsync(ShareCreateDTO dto);
+        Task<bool> ImportSharedListAsync(int currentUserId, ImportShareDTO dto);
         Task<bool> DeleteShareAsync(int id);
     }
 }

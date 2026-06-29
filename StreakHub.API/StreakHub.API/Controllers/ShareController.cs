@@ -5,7 +5,7 @@ using StreakHub.API.Services;
 namespace StreakHub.API.Controllers
 {
     [ApiController]
-    [Route("api/shares")]
+    [Route("api/[controller]")]
     public class ShareController : ControllerBase
     {
         private readonly IShareService _shareService;

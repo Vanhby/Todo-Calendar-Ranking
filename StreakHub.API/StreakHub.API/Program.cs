@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StreakHub.API.Data;
+using StreakHub.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IRankingService, RankingService>();
 
 builder.Services.AddOpenApi();
 
