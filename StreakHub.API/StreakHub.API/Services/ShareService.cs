@@ -17,6 +17,10 @@ namespace StreakHub.API.Services
             _context = context;
         }
 
+        public ShareService()
+        {
+        }
+
         public async Task<ShareResponseDTO?> GetShareByIdAsync(int id)
         {
             // Dùng .Select để tối ưu. EF Core sẽ tự dịch s.Stars.Count thành câu lệnh COUNT() trong SQL.
@@ -86,18 +90,40 @@ namespace StreakHub.API.Services
             return true;
         }
 
+        public bool ValidateShareCode(String shareCode)
+        {
+            if (shareCode == "")
+            {
+                return false;
+            }
+            else if (shareCode.Length < 4 || shareCode.Length > 16)
+            {
+                return false;
+            }
+            else if (!shareCode.All(char.IsLetterOrDigit))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public async Task<ShareResponseDTO> CreateShareAsync(ShareCreateDTO dto)
         {
-            // Tự động generate ShareCode ngẫu nhiên (Lấy 8 ký tự từ mảng Guid và viết hoa)
-            string randomShareCode = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
+            if(!ValidateShareCode(dto.ShareCode))
+            {
+                throw new Exception("Mã chia sẻ không hợp lệ!");
+            }
 
             var share = new Share
             {
                 UserId = dto.UserId,
                 Title = dto.Title,
-                TargetDate = dto.TargetDate, // Lưu thẳng DateOnly từ Frontend gửi lên (Luật 2)
-                ShareCode = randomShareCode, // Dùng mã ngẫu nhiên vừa tạo
-                CreatedAt = DateTime.UtcNow  // LUẬT 1: Cấm dùng DateTime.Now, ép dùng UtcNow chuẩn quốc tế
+                TargetDate = dto.TargetDate,
+                ShareCode = dto.ShareCode,
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Shares.Add(share);
@@ -111,7 +137,7 @@ namespace StreakHub.API.Services
                 ShareCode = share.ShareCode,
                 CreatedAt = share.CreatedAt,
                 Title = share.Title,
-                TotalStars = 0 // Bài viết mới tạo mặc định sẽ có 0 sao
+                TotalStars = 0
             };
         }
 
