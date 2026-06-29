@@ -150,5 +150,30 @@ namespace StreakHub.API.Services
                     Color = t.Color
                 }).ToListAsync();
         }
+        public async Task<List<TodoResponse>> GetTasksByShareIdAsync(int shareId)
+        {
+            // 1. Tìm thông tin lượt Share để lấy UserId và TargetDate nhằm đối chiếu
+            var share = await _context.Shares.FirstOrDefaultAsync(s => s.Id == shareId);
+            if (share == null) return new List<TodoResponse>();
+
+            // 2. Truy vấn danh sách Todo có cùng UserId và TaskDate trùng với TargetDate của lượt Share này
+            return await _context.Todos
+                .Include(t => t.TodoTags)
+                    .ThenInclude(tt => tt.Tag) // Kéo kèm dữ liệu từ bảng Tag
+                .Where(t => t.UserId == share.UserId && t.TaskDate == share.TargetDate)
+                .Select(t => new TodoResponse
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    IsCompleted = t.IsCompleted,
+                    Tags = t.TodoTags.Select(tt => new TagDTO
+                    {
+                        Id = tt.Tag.Id,
+                        Name = tt.Tag.Name,
+                        Color = tt.Tag.Color
+                    }).ToList()
+                })
+                .ToListAsync();
+        }
     }
 }

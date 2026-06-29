@@ -68,5 +68,13 @@ namespace StreakHub.API.Controllers
             var tasks = await _todoService.GetTasksByDayAsync(GetCurrentUserId(), date);
             return Ok(tasks);
         }
+
+        [HttpGet("share/{shareId}")]
+        [AllowAnonymous] // Cho phép xem công khai ở trang Explore (nếu hệ thống yêu cầu công khai)
+        public async Task<IActionResult> GetTasksByShareId(int shareId)
+        {
+            var tasks = await _todoService.GetTasksByShareIdAsync(shareId);
+            return Ok(tasks);
+        }
     }
 }

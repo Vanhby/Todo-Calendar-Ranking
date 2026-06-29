@@ -187,11 +187,7 @@
 
     // Hàm gọi API tải dữ liệu Trending
     async function loadTrendingData(append = false) {
-        // Lưu ý: Đổi value trong thẻ HTML <option value="all_time"> thành <option value="all">
-        // để khớp với logic "all" của Backend nhé.
         const filterValue = timeFilterSelect.value;
-
-        // Lấy ngày hiện tại định dạng YYYY-MM-DD cho Backend (ví dụ: 2026-06-28)
         const today = new Date();
         const clientToday = today.toLocaleDateString('en-CA');
 
@@ -203,44 +199,61 @@
         }
 
         try {
-            // 1 & 2 & 3. Cập nhật lại đúng URL và các tên tham số (timeframe, limit, clientToday, skip)
             const url = `/api/ranking/trending?timeframe=${filterValue}&limit=${takeLimit}&skip=${currentSkip}&clientToday=${clientToday}`;
-
-            // Đưa object { method: 'GET' } vào hàm fetch
             const response = await fetch(url, { method: 'GET' });
 
             if (!response.ok) throw new Error("Lỗi API: " + response.status);
 
-            const todolists = await response.json();
+            // Lấy danh sách Shares thô từ API Trending
+            const rawShares = await response.json();
 
             if (!append) {
                 trendingContainer.innerHTML = '';
             }
 
-            if (todolists.length === 0 && !append) {
+            if (rawShares.length === 0 && !append) {
                 trendingContainer.innerHTML = `<p class="text-sm text-[#6e7681] text-center py-8">Chưa có todolist nào lọt top trending trong khoảng thời gian này.</p>`;
+                return;
             }
 
-            todolists.forEach(item => {
-                // 5. Map lại các key từ Backend trả về cho khớp với hàm createCardTemplate
-                const mappedItem = {
-                    shareId: item.id || item.Id, // Đề phòng C# serialize thành camelCase hoặc PascalCase
-                    username: item.userId || item.UserId, // Ghi chú: Backend hiện chỉ trả về ID, bạn nên sửa C# để trả về Username thật
+            // TẠI ĐÂY: Dùng Promise.all để gọi API lấy Todo cho từng ShareId
+            const todolists = await Promise.all(rawShares.map(async (item) => {
+                const shareId = item.id || item.Id;
+                let fetchedTodos = [];
+
+                try {
+                    // Gọi tới API TodoController bạn vừa tạo ở bước trước
+                    const todoRes = await fetch(`/api/todos/share/${shareId}`);
+                    if (todoRes.ok) {
+                        fetchedTodos = await todoRes.json();
+                    }
+                } catch (err) {
+                    console.error(`Lỗi khi lấy Todo cho ShareId ${shareId}:`, err);
+                }
+
+                // Map lại dữ liệu
+                return {
+                    shareId: shareId,
+                    username: item.username || item.Username || `User_${item.userId || item.UserId}`, // Tạm hiển thị User_ID nếu backend chưa join bảng Users
                     title: item.title || item.Title,
                     totalStars: item.totalStars || item.TotalStars,
                     category: item.category || 'General',
                     usesCount: item.usesCount || 0,
                     shareCode: item.shareCode || item.ShareCode,
                     targetDate: item.targetDate || item.TargetDate,
-                    createdAt: item.createdAt || item.CreatedAt
+                    createdAt: item.createdAt || item.CreatedAt,
+                    todos: fetchedTodos // <--- Đắp mảng Todo lấy được từ API vào đây
                 };
+            }));
 
+            // Render ra HTML
+            todolists.forEach(mappedItem => {
                 const cardHtml = createCardTemplate(mappedItem);
                 trendingContainer.insertAdjacentHTML('beforeend', cardHtml);
             });
 
             // Xử lý nút xem thêm
-            if (todolists.length < takeLimit) {
+            if (rawShares.length < takeLimit) {
                 loadMoreBtn.classList.add('hidden');
             } else {
                 loadMoreBtn.classList.remove('hidden');
@@ -261,45 +274,73 @@
 
     // Hàm sinh cấu trúc HTML mẫu
     function createCardTemplate(item) {
-        // Escaping nhẹ để chống lỗi XSS cơ bản (nếu backend chưa xử lý)
         const title = item.title || 'Untitled';
-
-        // Format lại ngày tháng cho đẹp (DD/MM/YYYY)
         const targetDateStr = item.targetDate ? new Date(item.targetDate).toLocaleDateString('vi-VN') : 'N/A';
         const createdAtStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('vi-VN') : 'N/A';
 
-        // Gắn thêm data-attribute và truyền event vào hàm star để dễ dàng update DOM
+        // XỬ LÝ RENDER DANH SÁCH TODO
+        let todosHtml = '';
+        if (item.todos && item.todos.length > 0) {
+            todosHtml = item.todos.map(todo => {
+                const isCompleted = todo.isCompleted || todo.IsCompleted;
+                const todoTitle = todo.title || todo.Title || 'Untitled Task';
+
+                // Icon checkmark xanh cho task hoàn thành, icon tròn xám cho task chưa hoàn thành
+                const icon = isCompleted
+                    ? `<svg class="w-4 h-4 mt-0.5 flex-shrink-0 text-[#3fb950]" fill="currentColor" viewBox="0 0 16 16"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>`
+                    : `<svg class="w-4 h-4 mt-0.5 flex-shrink-0 text-[#6e7681]" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z"></path></svg>`;
+
+                // Gạch ngang và làm mờ text nếu task đã xong
+                const textClass = isCompleted ? 'text-[#8b949e] line-through' : 'text-[#c9d1d9]';
+
+                return `
+                <li class="flex items-start gap-2">
+                    ${icon}
+                    <span class="text-sm ${textClass}">${todoTitle}</span>
+                </li>
+            `;
+            }).join('');
+        } else {
+            todosHtml = `<li class="text-sm text-[#6e7681] italic">Không có công việc nào trong danh sách này.</li>`;
+        }
+
         return `
-      <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
-        <div class="flex items-start justify-between gap-3 mb-2">
-          <div class="flex items-center gap-2">
-            <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
-            <a href="/share/${item.shareId}" class="text-[#58a6ff] font-semibold hover:underline">${item.username} / ${title}</a>
-          </div>
-          <button onclick="toggleStarEffect(event, ${item.shareId})" class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0 transition-colors">
-            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-current text-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-            <span class="star-text">Star</span>
-          </button>
-        </div>
+          <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div class="flex items-center gap-2">
+                <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
+                <a href="/share/${item.shareId}" class="text-[#58a6ff] font-semibold hover:underline">${item.username} / ${title}</a>
+              </div>
+              <button onclick="toggleStarEffect(event, ${item.shareId})" class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0 transition-colors">
+                <svg height="12" viewBox="0 0 16 16" width="12" class="fill-current text-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                <span class="star-text">Star</span>
+              </button>
+            </div>
 
-        <div class="text-sm text-[#8b949e] mb-4">
-          Mục tiêu: <span class="text-[#c9d1d9]">${targetDateStr}</span> • Đã tạo: <span class="text-[#c9d1d9]">${createdAtStr}</span>
-        </div>
+            <div class="text-sm text-[#8b949e] mb-3">
+              Mục tiêu: <span class="text-[#c9d1d9]">${targetDateStr}</span> • Đã tạo: <span class="text-[#c9d1d9]">${createdAtStr}</span>
+            </div>
 
-        <div class="flex items-center gap-4 text-xs text-[#6e7681]">
-          <span class="flex items-center gap-1">
-            <span class="w-3 h-3 rounded-full bg-[#39d353] inline-block"></span>
-            ${item.category || 'General'}
-          </span>
-          <span class="flex items-center gap-1 hover:text-[#58a6ff] cursor-pointer">
-            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-            <span class="star-count">${item.totalStars || 0}</span>
-          </span>
-          <span>${item.usesCount || 0} lượt dùng</span>
-          <span class="bg-[#21262d] px-2 py-0.5 rounded text-[#c9d1d9] border border-[#30363d]">Share code: <span class="font-mono text-[#58a6ff]">${item.shareCode || 'N/A'}</span></span>
-        </div>
-      </article>
-    `;
+            <div class="mb-4 bg-[#0d1117] border border-[#30363d] rounded-md p-3 max-h-48 overflow-y-auto">
+                <ul class="space-y-1.5">
+                    ${todosHtml}
+                </ul>
+            </div>
+
+            <div class="flex items-center gap-4 text-xs text-[#6e7681]">
+              <span class="flex items-center gap-1">
+                <span class="w-3 h-3 rounded-full bg-[#39d353] inline-block"></span>
+                ${item.category || 'General'}
+              </span>
+              <span class="flex items-center gap-1 hover:text-[#58a6ff] cursor-pointer">
+                <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                <span class="star-count">${item.totalStars || 0}</span>
+              </span>
+              <span>${item.usesCount || 0} lượt dùng</span>
+              <span class="bg-[#21262d] px-2 py-0.5 rounded text-[#c9d1d9] border border-[#30363d]">Share code: <span class="font-mono text-[#58a6ff]">${item.shareCode || 'N/A'}</span></span>
+            </div>
+          </article>
+        `;
     }
 
     // Event Listeners
