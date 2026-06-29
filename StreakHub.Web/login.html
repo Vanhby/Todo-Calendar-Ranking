@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreakHub - Đăng Nhập & Đăng Ký</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f8fafc;
+        }
+
+        .container {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 28px;
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+            input:focus {
+                border-color: #38bdf8;
+                box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+            }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0284c7;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+            button:hover {
+                background: #0369a1;
+            }
+
+        .toggle-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+            .toggle-text a {
+                color: #38bdf8;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+                .toggle-text a:hover {
+                    text-decoration: underline;
+                }
+
+        #messageBox {
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+            text-align: center;
+        }
+
+        .success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #4ade80;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #f87171;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 id="formTitle">Đăng Nhập StreakHub</h2>
+
+        <div id="messageBox"></div>
+
+        <form id="authForm" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label for="username">Tài khoản</label>
+                <input type="text" id="username" required placeholder="Nhập username của bạn...">
+            </div>
+
+            <div class="form-group" id="emailGroup" style="display: none;">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Nhập địa chỉ email...">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" required placeholder="Nhập mật khẩu...">
+            </div>
+
+            <button type="submit" id="btnSubmit">Đăng Nhập</button>
+        </form>
+
+        <div class="toggle-text">
+            <span id="toggleHint">Chưa có tài khoản? </span>
+            <a href="javascript:void(0)" id="toggleLink" onclick="toggleForm()">Đăng ký ngay</a>
+        </div>
+    </div>
+
+    <script>
+        // Mặc định ban đầu trạng thái là màn hình Đăng nhập (login)
+        let isLoginMode = true;
+
+        function toggleForm() {
+            isLoginMode = !isLoginMode;
+            const formTitle = document.getElementById("formTitle");
+            const emailGroup = document.getElementById("emailGroup");
+            const btnSubmit = document.getElementById("btnSubmit");
+            const toggleHint = document.getElementById("toggleHint");
+            const toggleLink = document.getElementById("toggleLink");
+            const emailInput = document.getElementById("email");
+            const msgBox = document.getElementById("messageBox");
+
+            msgBox.style.display = "none"; // Reset thông báo cũ
+
+            if (isLoginMode) {
+                formTitle.innerText = "Đăng Nhập StreakHub";
+                emailGroup.style.display = "none";
+                emailInput.removeAttribute("required");
+                btnSubmit.innerText = "Đăng Nhập";
+                toggleHint.innerText = "Chưa có tài khoản? ";
+                toggleLink.innerText = "Đăng ký ngay";
+            } else {
+                formTitle.innerText = "Tạo Tài Khoản Mới";
+                emailGroup.style.display = "block";
+                emailInput.setAttribute("required", "true");
+                btnSubmit.innerText = "Đăng Ký Tài Khoản";
+                toggleHint.innerText = "Đã có tài khoản rồi? ";
+                toggleLink.innerText = "Đăng nhập";
+            }
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault(); // Chặn hành vi load lại trang của form mặc định
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const email = document.getElementById("email").value;
+            const msgBox = document.getElementById("messageBox");
+
+            // Xác định chính xác URL API dựa trên routing của .NET 10 Controller bạn đã tạo
+            const url = isLoginMode ? 'http://localhost:5127/api/auth/login' : 'http://localhost:5127/api/auth/register';
+
+            // Xây dựng Object DTO đồng bộ hoàn toàn với backend
+            const payload = isLoginMode
+                ? { Username: username, Password: password }
+                : { Username: username, Email: email, Password: password };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    msgBox.className = "success";
+                    msgBox.innerText = data.message;
+                    msgBox.style.display = "block";
+
+                    if (isLoginMode) {
+                        // Nếu đăng nhập thành công, chuyển hướng người dùng sang trang quản lý Todo chính
+                        setTimeout(() => {
+                            window.location.href = "/todo.html";
+                        }, 1200);
+                    } else {
+                        // Nếu đăng ký thành công, tự động chuyển về giao diện đăng nhập cho tiện
+                        setTimeout(() => { toggleForm(); }, 1500);
+                    }
+                } else {
+                    // Hiển thị các thông báo lỗi bóc tách từ hàm CheckTaiKhoan, CheckMatKhau bên Service đẩy lên
+                    msgBox.className = "error";
+                    msgBox.innerText = data.message || "Đã xảy ra lỗi kiểm tra dữ liệu.";
+                    msgBox.style.display = "block";
+                }
+            } catch (error) {
+                msgBox.className = "error";
+                msgBox.innerText = "Không thể kết nối đến server .NET.";
+                msgBox.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

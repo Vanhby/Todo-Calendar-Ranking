@@ -19,12 +19,8 @@ namespace StreakHub.API.Controllers
 
         private int GetCurrentUserId()
         {
-            return 1; // BẮT BUỘC: Mở lại dòng này để test luồng database thực tế khi chưa có token đăng nhập
+            return HttpContext.Session.GetInt32("UserId") ?? 0;
         }
-        //private int GetCurrentUserId()
-        //{
-        //    return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        //}
 
         // 7: Tạo 1 task mới
         [HttpPost]
@@ -61,10 +57,12 @@ namespace StreakHub.API.Controllers
         }
 
         // 11: Lấy Todo theo ngày
+
         [HttpGet("day")]
-        public async Task<IActionResult> GetTasksByDay([FromQuery] DateOnly date) 
+        public async Task<IActionResult> GetTasksByDay([FromQuery] DateOnly date, [FromQuery] int userId) // Thêm userId vào đây
         {
-            var tasks = await _todoService.GetTasksByDayAsync(GetCurrentUserId(), date);
+            // Lấy dữ liệu thật từ Database dựa trên userId vừa nhận được
+            var tasks = await _todoService.GetTasksByDayAsync(userId, date);
             return Ok(tasks);
         }
     }

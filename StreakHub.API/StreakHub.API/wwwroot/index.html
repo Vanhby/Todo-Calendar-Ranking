@@ -14,8 +14,8 @@
 
     <!-- Overlay tối phía sau drawer -->
     <label for="drawer-toggle"
-           class="fixed inset-0 z-30 bg-black/60 opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:pointer-events-auto transition-opacity"
-           aria-hidden="true"></label>
+                 class="fixed inset-0 z-30 bg-black/60 opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:pointer-events-auto transition-opacity"
+                 aria-hidden="true"></label>
 
     <!-- Drawer / Menu dọc bên trái -->
     <aside class="fixed top-0 left-0 z-40 h-full w-72 bg-[#0d1117] border-r border-[#30363d] -translate-x-full peer-checked:translate-x-0 transition-transform duration-300 overflow-y-auto">
@@ -37,6 +37,14 @@
             <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium hover:bg-[#30363d]">
                 <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true"><path d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.231c0-.532.242-1.035.657-1.367l5.25-4.2Z"></path></svg>
                 Home
+            </a>
+
+            <!-- Todo (Nút mới thêm) -->
+            <a href="todo.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium hover:bg-[#30363d]">
+                <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true">
+                    <path d="M2.5 1.75v11.5c0 .414.336.75.75.75h10.5a.75.75 0 0 0 .75-.75V1.75a.75.75 0 0 0-.75-.75H3.25a.75.75 0 0 0-.75.75Zm11.25-.75A1.5 1.5 0 0 1 15 2.5v11A1.5 1.5 0 0 1 13.5 15H3.25A1.5 1.5 0 0 1 1.75 13.5V2.5A1.5 1.5 0 0 1 3.25 1h10.5ZM6.5 6.25a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Zm0 4a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Zm-2-4.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 4a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Z"></path>
+                </svg>
+                Todo
             </a>
 
             <!-- Settings (icon bánh răng) -->
@@ -69,12 +77,29 @@
                 <span class="font-semibold text-[#c9d1d9] hidden sm:inline">StreakHub</span>
             </div>
 
-            <!-- Noti -->
-            <button class="p-2 rounded-md border border-[#30363d] hover:border-[#c9d1d9]" aria-label="Thông báo">
-                <svg height="18" viewBox="0 0 16 16" width="18" class="fill-[#c9d1d9]" aria-hidden="true">
-                    <path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.359l1.703-2.555A.255.255 0 0 0 3 7.947Z"></path>
-                </svg>
-            </button>
+            <!-- Right Side: Auth + Noti -->
+            <div class="flex items-center gap-4">
+
+                <!-- Nút Đăng nhập / Đăng xuất -->
+                <div class="flex items-center gap-3 border-r border-[#30363d] pr-4">
+                    <!-- Nút Đăng nhập: Mặc định hiện -->
+                    <a href="login.html" id="nav-btn-login" class="text-sm font-medium text-[#c9d1d9] hover:text-white transition-colors">
+                        Đăng nhập/Đăng xuất
+                    </a>
+
+                    <!-- Nút Đăng xuất: Mặc định ẩn (màu đỏ cho nổi bật) -->
+                    <button id="nav-btn-logout" onclick="handleLogout()" class="text-sm font-medium text-[#f85149] hover:text-[#ff7b72] transition-colors hidden">
+                        Đăng xuất
+                    </button>
+                </div>
+
+                <!-- Noti -->
+                <button class="p-2 rounded-md border border-[#30363d] hover:border-[#c9d1d9]" aria-label="Thông báo">
+                    <svg height="18" viewBox="0 0 16 16" width="18" class="fill-[#c9d1d9]" aria-hidden="true">
+                        <path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.359l1.703-2.555A.255.255 0 0 0 3 7.947Z"></path>
+                    </svg>
+                </button>
+            </div>
         </nav>
     </header>
 
@@ -84,10 +109,10 @@
         <!-- Sidebar trái -->
         <aside class="w-full lg:w-72 flex-shrink-0">
             <img src="http://avatars.githubusercontent.com/u/9919?v=4"
-                 alt="Ảnh đại diện người dùng"
-                 class="w-32 h-32 rounded-full border border-[#30363d] mb-4" />
-            <h1 class="text-xl font-semibold text-[#c9d1d9]">Nguyen Van A</h1>
-            <p class="text-[#6e7681] mb-4">@devuser</p>
+                          alt="Ảnh đại diện người dùng"
+                          class="w-32 h-32 rounded-full border border-[#30363d] mb-4" />
+            <h1 id="user-display-name" class="text-xl font-semibold text-[#c9d1d9]">Loading...</h1>
+            <p id="user-username" class="text-[#6e7681] mb-4">@loading</p>
 
             <!-- Current Streak -->
             <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4 flex items-center gap-3 mb-4">
@@ -96,7 +121,7 @@
                 </svg>
                 <div>
                     <p class="text-sm text-[#6e7681]">Current Streak</p>
-                    <p class="text-lg font-bold text-[#c9d1d9]">12 days</p>
+                    <p id="streak-count" class="text-lg font-bold text-[#c9d1d9]">0 days</p>
                 </div>
             </div>
 
@@ -183,7 +208,7 @@
         <aside class="w-full lg:w-80 flex-shrink-0">
             <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4">
                 <div class="flex items-center justify-between mb-1">
-                    <h2 class="text-sm font-semibold text-[#c9d1d9]">Hôm nay</h2>
+                    <h2 id="todo-panel-title" class="text-sm font-semibold text-[#c9d1d9]">Hôm nay</h2>
                     <span id="today-progress" class="text-xs text-[#6e7681]"></span>
                     <button onclick="toggleTaskForm()" class="bg-[#238636] hover:bg-[#2ea043] text-white text-[10px] px-2 py-0.5 rounded border border-[rgba(240,246,252,0.1)] transition-colors">
                         + New Task
@@ -217,276 +242,330 @@
     </div>
 
     <script>
-    // ==========================================
-    // LOGIC CHO PHẦN CÔNG VIỆC (TODO/TAGS)
-    // ==========================================
-    const API_BASE = "http://localhost:5127/api";
+        // ==========================================
+        // LOGIC CHO PHẦN CÔNG VIỆC (TODO/TAGS)
+        // ==========================================
+        const API_BASE = "/api";
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const todayStr = new Date().toISOString().split('T')[0];
-      if (document.getElementById('inputTodoDate')) {
-        document.getElementById('inputTodoDate').value = todayStr;
-      }
-      loadTags();
-      loadTodosByDay(todayStr);
-    });
-
-    function toggleTaskForm() {
-      const form = document.getElementById('taskCreationForm');
-      if (form) form.classList.toggle('hidden');
-    }
-
-    async function loadTags() {
-      try {
-        const res = await fetch(`${API_BASE}/tags`);
-        const tags = await res.json();
-        const container = document.getElementById('formTagsContainer');
-        if (!container) return;
-        container.innerHTML = '';
-
-        if(tags.length === 0) {
-          container.innerHTML = '<span class="text-[11px] text-[#6e7681]">Chưa có nhãn nào.</span>';
-          return;
-        }
-
-        tags.forEach(tag => {
-          container.innerHTML += `
-            <label class="flex items-center gap-1 border border-[#30363d] px-1.5 py-0.5 rounded cursor-pointer text-[11px]">
-              <input type="checkbox" value="${tag.id}" class="tag-form-checkbox w-3 h-3 rounded bg-[#0d1117] border-[#30363d]">
-              <span style="color: ${tag.color}; font-weight: bold;">${tag.name}</span>
-            </label>
-          `;
-        });
-      } catch (err) {
-        console.error("Lỗi khi tải tags:", err);
-      }
-    }
-
-    async function submitTodo() {
-      const title = document.getElementById('inputTodoTitle').value.trim();
-      const taskDate = document.getElementById('inputTodoDate').value;
-
-      if(!title) {
-        alert("Vui lòng nhập nội dung công việc!");
-        return;
-      }
-
-      const checkboxes = document.querySelectorAll('.tag-form-checkbox:checked');
-      const tagIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
-
-      try {
-        const todayStr = new Date().toISOString().split('T')[0];
-        const res = await fetch(`${API_BASE}/todos?clientToday=${todayStr}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, taskDate, tagIds })
-        });
-
-        if(res.ok) {
-          document.getElementById('inputTodoTitle').value = '';
-          toggleTaskForm();
-          loadTodosByDay(taskDate);
-          // Reload lại lịch để cập nhật màu sắc ô đóng góp đóng góp
-          if (typeof renderCalendar === "function") renderCalendar();
-        }
-      } catch (err) {
-        console.error("Lỗi khi tạo Todo mới:", err);
-      }
-    }
-
-    async function loadTodosByDay(targetDate) {
-      const pendingList = document.getElementById('todo-pending');
-      const doneList = document.getElementById('todo-done');
-
-      if (!pendingList || !doneList) return;
-
-      pendingList.innerHTML = '<li class="text-xs text-[#6e7681] italic">Đang tải việc...</li>';
-      doneList.innerHTML = '<li class="text-xs text-[#6e7681] italic">Đang tải việc...</li>';
-
-      try {
-        const res = await fetch(`${API_BASE}/todos/day?date=${targetDate}`);
-        const todos = await res.json();
-
-        pendingList.innerHTML = '';
-        doneList.innerHTML = '';
-
-        let hasPending = false;
-        let hasDone = false;
-
-        todos.forEach(todo => {
-          let tagsHtml = '';
-          if(todo.tags && todo.tags.length > 0) {
-            todo.tags.forEach(t => {
-              tagsHtml += `
-                <span class="text-[10px] border px-1.5 py-0.2 rounded-full font-medium" style="border-color: ${t.color}; color: ${t.color};">
-                  ${t.name}
-                </span>`;
-            });
-          }
-
-          const itemHtml = `
-            <li class="flex items-start gap-2 p-2 rounded-md hover:bg-[#30363d] group transition-colors">
-              <input type="checkbox" ${todo.isCompleted ? 'checked' : ''} disabled class="mt-0.5 w-3.5 h-3.5 rounded border-[#30363d] bg-[#0d1117] checked:bg-[#238636]">
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium ${todo.isCompleted ? 'text-[#8b949e] line-through' : 'text-[#c9d1d9]'} truncate">${todo.title}</p>
-                <div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div>
-              </div>
-            </li>
-          `;
-
-          if(todo.isCompleted) {
-            doneList.innerHTML += itemHtml;
-            hasDone = true;
-          } else {
-            pendingList.innerHTML += itemHtml;
-            hasPending = true;
-          }
-        });
-
-        if(!hasPending) pendingList.innerHTML = '<li class="text-xs text-[#6e7681] italic p-1">Không có việc tồn đọng</li>';
-        if(!hasDone) doneList.innerHTML = '<li class="text-xs text-[#6e7681] italic p-1">Chưa hoàn thành việc nào</li>';
-
-      } catch (err) {
-        console.error("Lỗi kết nối API:", err);
-        pendingList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
-        doneList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
-      }
-    }
-
-    // ==========================================
-    // LOGIC CỦA LỊCH (CALENDAR) GỘP TỪ FILE NGOÀI
-    // ==========================================
-    const CALENDAR_API_BASE = "/api"; // Fixed sang cổng 5127 phục vụ Lịch
-    const currentUserId = 1;
-
-    const contribColors = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
-    const monthNames = [
-        "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
-        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
-    ];
-
-    const calendar = document.getElementById("calendar");
-    const title = document.getElementById("cal-title");
-    const monthSelect = document.getElementById("month-select");
-    const yearSelect = document.getElementById("year-select");
-
-    const today = new Date();
-    let viewYear = today.getFullYear();
-    let viewMonth = today.getMonth(); 
-
-    document.addEventListener("DOMContentLoaded", () => {
-        setupCalendarEvents();
-        renderCalendar();
-    });
-
-    async function fetchCalendarData(userId, year, month) {
-        try {
-            const backendMonth = month + 1; 
-            const url = `${CALENDAR_API_BASE}/calendar/month/${userId}?year=${year}&month=${backendMonth}`;
-            
-            const response = await fetch(url);
-            if (!response.ok) throw new Error("Lỗi mạng hoặc API Lịch chưa chạy!");
-            
-            return await response.json(); 
-        } catch (error) {
-            console.error("Không lấy được dữ liệu lịch:", error);
-            return null;
-        }
-    }
-
-    function setupCalendarEvents() {
-        if (!monthSelect || !yearSelect) return;
-
-        monthNames.forEach((name, idx) => {
-            const opt = document.createElement("option");
-            opt.value = idx;
-            opt.textContent = name;
-            opt.className = "bg-[#161b22]";
-            monthSelect.appendChild(opt);
-        });
-
-        for (let y = today.getFullYear() - 10; y <= today.getFullYear() + 5; y++) {
-            const opt = document.createElement("option");
-            opt.value = y;
-            opt.textContent = y;
-            opt.className = "bg-[#161b22]";
-            yearSelect.appendChild(opt);
-        }
-
-        document.getElementById("prev-month").addEventListener("click", () => changeMonth(-1));
-        document.getElementById("next-month").addEventListener("click", () => changeMonth(1));
-        document.getElementById("today-btn").addEventListener("click", () => {
-            viewYear = today.getFullYear();
-            viewMonth = today.getMonth();
+        document.addEventListener('DOMContentLoaded', () => {
+            const todayStr = new Date().toISOString().split('T')[0];
+            if (document.getElementById('inputTodoDate')) {
+                document.getElementById('inputTodoDate').value = todayStr;
+            }
+            loadTags();
+            loadTodosByDay(todayStr);
+            setupCalendarEvents();
             renderCalendar();
+            loadUserData();
         });
-        
-        monthSelect.addEventListener("change", (e) => { viewMonth = parseInt(e.target.value); renderCalendar(); });
-        yearSelect.addEventListener("change", (e) => { viewYear = parseInt(e.target.value); renderCalendar(); });
-    }
 
-    function changeMonth(delta) {
-        viewMonth += delta;
-        if (viewMonth < 0) { viewMonth = 11; viewYear--; }
-        else if (viewMonth > 11) { viewMonth = 0; viewYear++; }
-        renderCalendar();
-    }
+        function toggleTaskForm() {
+            const form = document.getElementById('taskCreationForm');
+            if (form) form.classList.toggle('hidden');
+        }
 
-    async function renderCalendar() {
-        if (!calendar || !title) return;
-        calendar.innerHTML = ""; 
-        title.textContent = monthNames[viewMonth] + " " + viewYear;
-        monthSelect.value = viewMonth;
-        yearSelect.value = viewYear;
+        async function loadTags() {
+            try {
+                const res = await fetch(`${API_BASE}/tags`);
+                const tags = await res.json();
+                const container = document.getElementById('formTagsContainer');
+                if (!container) return;
+                container.innerHTML = '';
 
-        const apiData = await fetchCalendarData(currentUserId, viewYear, viewMonth);
-
-        const firstDay = new Date(viewYear, viewMonth, 1).getDay();
-        const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-
-        for (let i = 0; i < 42; i++) {
-            const cell = document.createElement("div");
-            const dayNum = i - firstDay + 1;
-            const inMonth = dayNum >= 1 && dayNum <= daysInMonth;
-
-            if (inMonth) {
-                let level = 0; 
-                if (apiData && apiData.days) {
-                    const backendMonthStr = String(viewMonth + 1).padStart(2, '0');
-                    const dayStr = String(dayNum).padStart(2, '0');
-                    const targetDateStr = `${viewYear}-${backendMonthStr}-${dayStr}`;
-
-                    const dayInfo = apiData.days.find(d => d.date === targetDateStr);
-                    if (dayInfo) {
-                        level = dayInfo.colorLevel;
-                    }
+                if (tags.length === 0) {
+                    container.innerHTML = '<span class="text-[11px] text-[#6e7681]">Chưa có nhãn nào.</span>';
+                    return;
                 }
 
-                const color = contribColors[level];
-                const border = color === "#161b22" ? "#30363d" : "transparent";
-                
-                cell.className = "aspect-square rounded-md flex items-start justify-end p-1 text-xs font-medium border hover:border-white cursor-pointer";
-                cell.style.backgroundColor = color;
-                cell.style.borderColor = border;
-                cell.style.color = color === "#161b22" ? "#6e7681" : "#ffffff";
-                cell.textContent = dayNum;
+                tags.forEach(tag => {
+                    container.innerHTML += `
+                <label class="flex items-center gap-1 border border-[#30363d] px-1.5 py-0.5 rounded cursor-pointer text-[11px]">
+                  <input type="checkbox" value="${tag.id}" class="tag-form-checkbox w-3 h-3 rounded bg-[#0d1117] border-[#30363d]">
+                  <span style="color: ${tag.color}; font-weight: bold;">${tag.name}</span>
+                </label>
+              `;
+                });
+            } catch (err) {
+                console.error("Lỗi khi tải tags:", err);
+            }
+        }
 
-                // Đồng bộ sự kiện nhấn vào một ngày trên lịch sẽ reload list Todo của ngày đó
-                cell.addEventListener("click", () => {
-                    const backendMonthStr = String(viewMonth + 1).padStart(2, '0');
-                    const dayStr = String(dayNum).padStart(2, '0');
-                    loadTodosByDay(`${viewYear}-${backendMonthStr}-${dayStr}`);
+        async function submitTodo() {
+            const title = document.getElementById('inputTodoTitle').value.trim();
+            const taskDate = document.getElementById('inputTodoDate').value;
+
+            if (!title) {
+                alert("Vui lòng nhập nội dung công việc!");
+                return;
+            }
+
+            const checkboxes = document.querySelectorAll('.tag-form-checkbox:checked');
+            const tagIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
+
+            try {
+                const todayStr = new Date().toISOString().split('T')[0];
+                const res = await fetch(`${API_BASE}/todos?clientToday=${todayStr}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, taskDate, tagIds })
                 });
 
-                if (dayNum === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
-                    cell.style.borderColor = "#58a6ff";
+                if (res.ok) {
+                    document.getElementById('inputTodoTitle').value = '';
+                    toggleTaskForm();
+                    loadTodosByDay(taskDate);
+                    // Reload lại lịch để cập nhật màu sắc ô đóng góp đóng góp
+                    if (typeof renderCalendar === "function") renderCalendar();
                 }
-            } else {
-                cell.className = "aspect-square rounded-md border border-transparent opacity-20";
+            } catch (err) {
+                console.error("Lỗi khi tạo Todo mới:", err);
             }
-            calendar.appendChild(cell);
         }
-    }
+
+        async function loadTodosByDay(targetDate) {
+            const pendingList = document.getElementById('todo-pending');
+            const doneList = document.getElementById('todo-done');
+
+            if (!pendingList || !doneList) return;
+
+            pendingList.innerHTML = '<li class="text-xs text-[#6e7681] italic">Đang tải việc...</li>';
+            doneList.innerHTML = '<li class="text-xs text-[#6e7681] italic">Đang tải việc...</li>';
+
+            try {
+                const titleEl = document.getElementById('todo-panel-title');
+                if (titleEl) {
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    if (targetDate === todayStr) {
+                        titleEl.innerText = "Hôm nay";
+                    } else {
+                        // Chuyển định dạng YYYY-MM-DD thành Ngày DD/MM/YYYY
+                        const [year, month, day] = targetDate.split('-');
+                        titleEl.innerText = `Ngày ${day}/${month}/${year}`;
+                    }
+                }
+                // 1. ÉP KIỂU LẤY ĐÚNG USER SỐ 7 (Cho giống Postman của bạn)
+                const userId = localStorage.getItem('currentUserId') || 0;
+
+                // 2. Nếu targetDate bị rỗng (xảy ra lỗi), lấy ngay ngày hôm nay đắp vào
+                if (!targetDate) {
+                    targetDate = new Date().toISOString().split('T')[0];
+                }
+
+                // 3. Xử lý triệt để vụ dư dấu gạch chéo //
+                const baseUrl = API_BASE.endsWith('/') ? API_BASE.slice(0, -1) : API_BASE;
+
+                // Tạo URL hoàn chỉnh
+                const fetchUrl = `${baseUrl}/todos/day?date=${targetDate}&userId=${userId}`;
+
+                // IN RA CONSOLE ĐỂ KIỂM TRA
+                console.log("🌐 Trình duyệt đang gọi API:", fetchUrl);
+
+                const res = await fetch(fetchUrl);
+                const todos = await res.json();
+
+                pendingList.innerHTML = '';
+                doneList.innerHTML = '';
+
+                let hasPending = false;
+                let hasDone = false;
+
+                // ... MỌI CODE XỬ LÝ HTML BÊN DƯỚI GIỮ NGUYÊN ...
+                todos.forEach(todo => {
+                    let tagsHtml = '';
+                    if (todo.tags && todo.tags.length > 0) {
+                        todo.tags.forEach(t => {
+                            tagsHtml += `<span class="text-[10px] border px-1.5 py-0.2 rounded-full font-medium" style="border-color: ${t.color}; color: ${t.color};">${t.name}</span>`;
+                        });
+                    }
+
+                    const itemHtml = `
+                        <li class="flex items-start gap-2 p-2 rounded-md hover:bg-[#30363d] group transition-colors">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium ${todo.isCompleted ? 'text-[#8b949e] line-through' : 'text-[#c9d1d9]'} truncate">${todo.title}</p>
+                                <div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div>
+                            </div>
+                        </li>
+                    `;
+
+                    if (todo.isCompleted) {
+                        doneList.innerHTML += itemHtml;
+                        hasDone = true;
+                    } else {
+                        pendingList.innerHTML += itemHtml;
+                        hasPending = true;
+                    }
+                });
+
+                if (!hasPending) pendingList.innerHTML = '<li class="text-xs text-[#6e7681] italic p-1">Không có việc tồn đọng</li>';
+                if (!hasDone) doneList.innerHTML = '<li class="text-xs text-[#6e7681] italic p-1">Chưa hoàn thành việc nào</li>';
+
+            } catch (err) {
+                console.error("Lỗi kết nối API:", err);
+                pendingList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
+                doneList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
+            }
+        }
+
+        // ==========================================
+        // LOGIC CỦA LỊCH (CALENDAR) GỘP TỪ FILE NGOÀI
+        // ==========================================
+        const CALENDAR_API_BASE = "/api"; // Fixed sang cổng 5127 phục vụ Lịch
+        const currentUserId = localStorage.getItem('currentUserId') || 1;
+
+        const contribColors = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
+        const monthNames = [
+            "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+            "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+        ];
+
+        const calendar = document.getElementById("calendar");
+        const title = document.getElementById("cal-title");
+        const monthSelect = document.getElementById("month-select");
+        const yearSelect = document.getElementById("year-select");
+
+        const today = new Date();
+        let viewYear = today.getFullYear();
+        let viewMonth = today.getMonth();
+
+        async function fetchCalendarData(userId, year, month) {
+            try {
+                const backendMonth = month + 1;
+                const url = `${CALENDAR_API_BASE}/calendar/month/${userId}?year=${year}&month=${backendMonth}`;
+
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Lỗi mạng hoặc API Lịch chưa chạy!");
+
+                return await response.json();
+            } catch (error) {
+                console.error("Không lấy được dữ liệu lịch:", error);
+                return null;
+            }
+        }
+
+        function setupCalendarEvents() {
+            if (!monthSelect || !yearSelect) return;
+
+            monthNames.forEach((name, idx) => {
+                const opt = document.createElement("option");
+                opt.value = idx;
+                opt.textContent = name;
+                opt.className = "bg-[#161b22]";
+                monthSelect.appendChild(opt);
+            });
+
+            for (let y = today.getFullYear() - 10; y <= today.getFullYear() + 5; y++) {
+                const opt = document.createElement("option");
+                opt.value = y;
+                opt.textContent = y;
+                opt.className = "bg-[#161b22]";
+                yearSelect.appendChild(opt);
+            }
+
+            document.getElementById("prev-month").addEventListener("click", () => changeMonth(-1));
+            document.getElementById("next-month").addEventListener("click", () => changeMonth(1));
+            document.getElementById("today-btn").addEventListener("click", () => {
+                viewYear = today.getFullYear();
+                viewMonth = today.getMonth();
+                renderCalendar();
+            });
+
+            monthSelect.addEventListener("change", (e) => { viewMonth = parseInt(e.target.value); renderCalendar(); });
+            yearSelect.addEventListener("change", (e) => { viewYear = parseInt(e.target.value); renderCalendar(); });
+        }
+
+        function changeMonth(delta) {
+            viewMonth += delta;
+            if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+            else if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+            renderCalendar();
+        }
+
+        async function renderCalendar() {
+            if (!calendar || !title) return;
+            calendar.innerHTML = "";
+            title.textContent = monthNames[viewMonth] + " " + viewYear;
+            monthSelect.value = viewMonth;
+            yearSelect.value = viewYear;
+
+            const apiData = await fetchCalendarData(currentUserId, viewYear, viewMonth);
+
+            const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+            const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+            for (let i = 0; i < 42; i++) {
+                const cell = document.createElement("div");
+                const dayNum = i - firstDay + 1;
+                const inMonth = dayNum >= 1 && dayNum <= daysInMonth;
+
+                if (inMonth) {
+                    let level = 0;
+                    if (apiData && apiData.days) {
+                        const backendMonthStr = String(viewMonth + 1).padStart(2, '0');
+                        const dayStr = String(dayNum).padStart(2, '0');
+                        const targetDateStr = `${viewYear}-${backendMonthStr}-${dayStr}`;
+
+                        const dayInfo = apiData.days.find(d => d.date === targetDateStr);
+                        if (dayInfo) {
+                            level = dayInfo.colorLevel;
+                        }
+                    }
+
+                    const color = contribColors[level];
+                    const border = color === "#161b22" ? "#30363d" : "transparent";
+
+                    cell.className = "aspect-square rounded-md flex items-start justify-end p-1 text-xs font-medium border hover:border-white cursor-pointer";
+                    cell.style.backgroundColor = color;
+                    cell.style.borderColor = border;
+                    cell.style.color = color === "#161b22" ? "#6e7681" : "#ffffff";
+                    cell.textContent = dayNum;
+
+                    // Đồng bộ sự kiện nhấn vào một ngày trên lịch sẽ reload list Todo của ngày đó
+                    cell.addEventListener("click", () => {
+                        const backendMonthStr = String(viewMonth + 1).padStart(2, '0');
+                        const dayStr = String(dayNum).padStart(2, '0');
+                        loadTodosByDay(`${viewYear}-${backendMonthStr}-${dayStr}`);
+                    });
+
+                    if (dayNum === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
+                        cell.style.borderColor = "#58a6ff";
+                    }
+                } else {
+                    cell.className = "aspect-square rounded-md border border-transparent opacity-20";
+                }
+                calendar.appendChild(cell);
+            }
+        }
+        async function loadUserData() {
+            const userId = localStorage.getItem('currentUserId');
+
+            try {
+                // 1. Lấy thông tin User
+                const userRes = await fetch(`${API_BASE}/auth/me/${userId}`);; // Đảm bảo API này trả về thông tin user
+                if (userRes.ok) {
+                    const userData = await userRes.json();
+                    // Cập nhật DOM
+                    document.getElementById('user-display-name').innerText = userData.data.username;
+                    document.getElementById('user-username').innerText = '@' + userData.data.username;
+                }
+
+                // 2. Lấy Streak
+                // Lưu ý: Endpoint này bạn đã có trong CalendarController: /api/calendar/streak/{userId}
+                const streakRes = await fetch(`${CALENDAR_API_BASE}/calendar/streak/${userId}`);
+                if (streakRes.ok) {
+                    const streakData = await streakRes.json();
+                    // Giả sử API trả về { streak: 12 }
+                    document.getElementById('streak-count').innerText = `${streakData.currentStreak || 0} days`;
+                }
+            } catch (err) {
+                console.error("Lỗi khi tải User/Streak:", err);
+            }
+        }
+        function handleLogout() {
+            // Xóa ID khỏi trình duyệt (Rút ví)
+            localStorage.removeItem('currentUserId');
+            // Đẩy về trang Đăng nhập
+            window.location.href = "login.html";
+        }
     </script>
 </body>
 </html>
