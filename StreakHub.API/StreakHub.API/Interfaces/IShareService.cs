@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-﻿using StreakHub.API.DTOs;
 
-namespace StreakHub.API.Interfaces
-{
-    public interface IShareService
-    {
-        Task<bool> ImportSharedListAsync(int currentUserId, ImportShareDTO dto);
-=======
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using StreakHub.API.DTOs;
 
 namespace StreakHub.API.Services
@@ -18,6 +10,5 @@ namespace StreakHub.API.Services
         Task<ShareResponseDTO> CreateShareAsync(ShareCreateDTO dto);
         Task<bool> ImportSharedListAsync(int currentUserId, ImportShareDTO dto);
         Task<bool> DeleteShareAsync(int id);
->>>>>>> feature/share-ranking
     }
 }

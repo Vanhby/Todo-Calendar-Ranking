@@ -1,16 +1,11 @@
-<<<<<<< HEAD
+
 ﻿using Microsoft.EntityFrameworkCore;
 using StreakHub.API.Data;
 using StreakHub.API.DTOs;
 using StreakHub.API.Interfaces;
-=======
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using StreakHub.API.Data;
-using StreakHub.API.DTOs;
->>>>>>> feature/share-ranking
 using StreakHub.API.Models;
 
 namespace StreakHub.API.Services
@@ -24,8 +19,6 @@ namespace StreakHub.API.Services
             _context = context;
         }
 
-<<<<<<< HEAD
-=======
         public async Task<ShareResponseDTO?> GetShareByIdAsync(int id)
         {
             // Dùng .Select để tối ưu. EF Core sẽ tự dịch s.Stars.Count thành câu lệnh COUNT() trong SQL.
@@ -46,7 +39,6 @@ namespace StreakHub.API.Services
             return shareDTO;
         }
 
->>>>>>> feature/share-ranking
         public async Task<bool> ImportSharedListAsync(int currentUserId, ImportShareDTO dto)
         {
             var today = DateOnly.FromDateTime(DateTime.UtcNow.AddHours(7));
@@ -95,8 +87,6 @@ namespace StreakHub.API.Services
             await _context.SaveChangesAsync();
             return true;
         }
-<<<<<<< HEAD
-=======
 
         public async Task<ShareResponseDTO> CreateShareAsync(ShareCreateDTO dto)
         {
@@ -136,6 +126,5 @@ namespace StreakHub.API.Services
             await _context.SaveChangesAsync();
             return true;
         }
->>>>>>> feature/share-ranking
     }
 }
