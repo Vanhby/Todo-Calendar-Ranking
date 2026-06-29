@@ -1,6 +1,6 @@
 // file: js/main.js
 
-const BASE_URL = "http://localhost:5127/api";
+const BASE_URL = "http://localhost:5000/api";
 const USER_ID = 1;
 
 let activeDashboardReminders = [];

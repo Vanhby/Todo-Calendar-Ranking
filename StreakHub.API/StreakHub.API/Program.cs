@@ -5,7 +5,6 @@ using StreakHub.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Cấu hình CORS chuẩn (Chỉ khai báo DUY NHẤT 1 lần)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -27,8 +26,6 @@ builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddHostedService<EmailReminderWorker>(); 
 builder.Services.AddScoped<IStreakService, StreakService>();
 builder.Services.AddScoped<IShareService, ShareService>();
-
-// CHỖ SỬA QUAN TRỌNG: Đăng ký TodoService của bạn để Controller gọi được qua Interface
 builder.Services.AddScoped<ITodoService, TodoService>();
 
 builder.Services.AddOpenApi();

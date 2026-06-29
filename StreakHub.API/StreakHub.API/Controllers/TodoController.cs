@@ -8,7 +8,6 @@ namespace StreakHub.API.Controllers
 {
     [Route("api/todos")]
     [ApiController]
-    [Authorize] 
     public class TodoController : ControllerBase
     {
         private readonly ITodoService _todoService; 
@@ -18,14 +17,14 @@ namespace StreakHub.API.Controllers
             _todoService = todoService;
         }
 
-        //private int GetCurrentUserId()
-        //{
-        //    return 1; // BẮT BUỘC: Mở lại dòng này để test luồng database thực tế khi chưa có token đăng nhập
-        //}
         private int GetCurrentUserId()
         {
-            return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            return 1; // BẮT BUỘC: Mở lại dòng này để test luồng database thực tế khi chưa có token đăng nhập
         }
+        //private int GetCurrentUserId()
+        //{
+        //    return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        //}
 
         // 7: Tạo 1 task mới
         [HttpPost]

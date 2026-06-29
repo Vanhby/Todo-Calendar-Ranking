@@ -48,85 +48,121 @@ namespace StreakHub.API.Services
             var dndService = scope.ServiceProvider.GetRequiredService<IDndService>();
 
             var now = DateTime.UtcNow;
+
+            _logger.LogInformation(">>> Query reminders");
+
             var pendingReminders = await context.Reminders
                 .Include(r => r.Todo)
                 .ThenInclude(t => t.User)
                 .Where(r => r.NotifyTime <= now && !r.IsSent)
                 .ToListAsync();
 
-            if (pendingReminders.Count == 0) return;
+            _logger.LogInformation($">>> Found {pendingReminders.Count} reminders");
+
+            if (pendingReminders.Count == 0)
+                return;
 
             foreach (var reminder in pendingReminders)
             {
-                var todo = reminder.Todo;
-                if (todo == null) continue;
+                _logger.LogInformation($">>> Processing reminder {reminder.Id}");
 
-                var user = todo.User;
-                if (user == null) continue;
-                if (await dndService.IsUserInDndAsync(user.UserId))
+                var todo = reminder.Todo;
+                if (todo == null)
                 {
-                    _logger.LogInformation($"Skipped sending email reminder {reminder.Id} because User {user.UserId} is in DND.");
+                    _logger.LogInformation("Todo == null");
                     continue;
                 }
 
-                bool success = await SendEmailAsync(user.Email, todo.Title, reminder.NotifyTime);
+                var user = todo.User;
+                if (user == null)
+                {
+                    _logger.LogInformation("User == null");
+                    continue;
+                }
+
+                _logger.LogInformation(">>> Before DND");
+
+                bool inDnd = await dndService.IsUserInDndAsync(user.UserId);
+
+                _logger.LogInformation($">>> After DND: {inDnd}");
+
+                if (inDnd)
+                {
+                    continue;
+                }
+
+                _logger.LogInformation(">>> Before SendEmail");
+
+                bool success = await SendEmailAsync(
+                    user.Email,
+                    todo.Title,
+                    reminder.NotifyTime);
+
+                _logger.LogInformation($">>> After SendEmail: {success}");
+
                 if (success)
                 {
                     reminder.IsSent = true;
                 }
             }
 
+            _logger.LogInformation(">>> Before SaveChanges");
+
             await context.SaveChangesAsync();
+
+            _logger.LogInformation(">>> After SaveChanges");
         }
 
-        private async Task<bool> SendEmailAsync(string recipientEmail, string todoTitle, DateTime notifyTime)
-        {
-            var smtpSection = _configuration.GetSection("SmtpSettings");
-            var server = smtpSection.GetValue<string>("Host") ?? smtpSection.GetValue<string>("Server") ?? "";
-            var port = smtpSection.GetValue<int>("Port", 587);
-            var senderEmail = smtpSection.GetValue<string>("SenderEmail") ?? "";
-            var senderName = smtpSection.GetValue<string>("SenderName") ?? "StreakHub Reminders";
-            var username = smtpSection.GetValue<string>("Username") ?? "";
-            var password = smtpSection.GetValue<string>("Password") ?? "";
-            var enableSsl = smtpSection.GetValue<bool>("EnableSsl", true);
-
-            var subject = "Reminder Notification";
-            var body = $"- Reminder title: {todoTitle}\n- Reminder time: {notifyTime.ToLocalTime():yyyy-MM-dd HH:mm:ss}\n- Reminder content: You have an upcoming task: {todoTitle}";
-
-            _logger.LogInformation($"[Email Simulation] Outbox to {recipientEmail}:\nSubject: {subject}\nBody:\n{body}");
-
-            if (string.IsNullOrWhiteSpace(server) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            private async Task<bool> SendEmailAsync(string recipientEmail, string todoTitle, DateTime notifyTime)
             {
-                _logger.LogWarning("Gmail SMTP settings not configured or incomplete. Simulated email output to logs succeeded.");
-                return true;
-            }
+                _logger.LogInformation("=== Enter SendEmailAsync ==="); 
+                var smtpSection = _configuration.GetSection("SmtpSettings");
+                var server = smtpSection.GetValue<string>("Host") ?? smtpSection.GetValue<string>("Server") ?? "";
+                var port = smtpSection.GetValue<int>("Port", 587);
+                var senderEmail = smtpSection.GetValue<string>("SenderEmail") ?? "";
+                var senderName = smtpSection.GetValue<string>("SenderName") ?? "StreakHub Reminders";
+                var username = smtpSection.GetValue<string>("Username") ?? "";
+                var password = smtpSection.GetValue<string>("Password") ?? "";
+                var enableSsl = smtpSection.GetValue<bool>("EnableSsl", true);
 
-            try
-            {
-                using var mailMessage = new MailMessage
+                var subject = "Reminder Notification";
+                var body = $"- Reminder title: {todoTitle}\n- Reminder time: {notifyTime.ToLocalTime():yyyy-MM-dd HH:mm:ss}\n- Reminder content: You have an upcoming task: {todoTitle}";
+
+                _logger.LogInformation($"[Email Simulation] Outbox to {recipientEmail}:\nSubject: {subject}\nBody:\n{body}");
+
+                if (string.IsNullOrWhiteSpace(server) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
                 {
-                    From = new MailAddress(senderEmail, senderName),
-                    Subject = subject,
-                    Body = body,
-                    IsBodyHtml = false
-                };
-                mailMessage.To.Add(recipientEmail);
+                    _logger.LogWarning("Gmail SMTP settings not configured or incomplete. Simulated email output to logs succeeded.");
+                    return true;
+                }
 
-                using var smtpClient = new SmtpClient(server, port)
+                try
                 {
-                    Credentials = new NetworkCredential(username, password),
-                    EnableSsl = enableSsl
-                };
+                    using var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, senderName),
+                        Subject = subject,
+                        Body = body,
+                        IsBodyHtml = false
+                    };
+                    mailMessage.To.Add(recipientEmail);
 
-                await smtpClient.SendMailAsync(mailMessage);
-                _logger.LogInformation($"Email sent successfully to {recipientEmail} via SMTP.");
-                return true;
+                    using var smtpClient = new SmtpClient(server, port)
+                    {
+                        Credentials = new NetworkCredential(username, password),
+                        EnableSsl = enableSsl
+                    };
+                    _logger.LogInformation(">>> About to call SendMailAsync");
+                    await smtpClient.SendMailAsync(mailMessage);
+                    _logger.LogInformation(">>> SendMailAsync finished");
+                    _logger.LogInformation($"Email sent successfully to {recipientEmail} via SMTP.");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Failed to send email to {recipientEmail} via Gmail SMTP.");
+                    return false;
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Failed to send email to {recipientEmail} via Gmail SMTP.");
-                return false;
-            }
-        }
     }
 }

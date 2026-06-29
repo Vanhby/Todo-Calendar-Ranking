@@ -6,7 +6,6 @@ namespace StreakHub.API.Controllers
 {
     [Route("api/tags")]
     [ApiController]
-    [Authorize] 
     public class TagsController : ControllerBase
     {
         private readonly ITodoService _todoService; 
