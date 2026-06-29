@@ -24,15 +24,23 @@
 
   <div class="p-6 max-w-screen-lg mx-auto">
     
-    <div class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-4">
-        <h1 class="text-2xl font-semibold text-[#c9d1d9]">Tasks for:</h1>
-        <input type="date" id="viewDate" onchange="loadTodos()" class="bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff]">
+      <div class="flex items-center justify-between mb-4">
+          <h1 class="text-lg font-semibold">Tasks</h1>
+
+          <div class="flex gap-2">
+
+              <button onclick="shareTodoList()"
+                      class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">
+                  Share
+              </button>
+
+              <button onclick="toggleForm()"
+                      class="bg-[#238636] px-3 py-1 rounded text-sm">
+                  + New
+              </button>
+
+          </div>
       </div>
-      <button onclick="toggleForm()" class="bg-[#238636] hover:bg-[#2ea043] text-white px-4 py-2 rounded-md text-sm font-medium transition-colors border border-[rgba(240,246,252,0.1)] shadow-sm">
-        New Task
-      </button>
-    </div>
 
     <div id="taskForm" class="hidden mb-6 p-4 border border-[#30363d] rounded-md bg-[#161b22]">
       <h2 class="text-lg font-semibold mb-3">Tạo công việc mới</h2>
@@ -72,11 +80,11 @@
 
   <script>
     const API_BASE = "/api";
-
+    const userId = localStorage.getItem("currentUserId");
     // Khi web vừa load xong
     document.addEventListener('DOMContentLoaded', () => {
       const today = new Date().toISOString().split('T')[0];
-      document.getElementById('viewDate').value = today;
+      document.getElementById('todoDate').value = today;
       document.getElementById('todoDate').value = today;
       
       loadTags();
@@ -128,21 +136,30 @@
 
       const checkboxes = document.querySelectorAll('.tag-checkbox:checked');
       const tagIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
-
       try {
-        const today = new Date().toISOString().split('T')[0];
-        const res = await fetch(`${API_BASE}/todos?clientToday=${today}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, taskDate, tagIds })
-        });
+          const today = new Date().toISOString().split('T')[0];
+
+          const res = await fetch(
+              `${API_BASE}/todos?clientToday=${today}&userId=${userId}`,
+              {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                      title,
+                      taskDate,
+                      tagIds
+                  })
+              }
+          );
 
         if (res.ok) {
           document.getElementById('todoTitle').value = ''; 
           toggleForm(); // Đóng form
           
           // Refresh list nếu trùng ngày đang xem
-          if(taskDate === document.getElementById('viewDate').value) {
+          if(taskDate === document.getElementById('todoDate').value) {
             loadTodos();
           }
         }
@@ -153,12 +170,14 @@
 
     // [API] Load danh sách Todo theo ngày
     async function loadTodos() {
-      const date = document.getElementById('viewDate').value;
+      const date = document.getElementById('todoDate').value;
       const container = document.getElementById('todoListContainer');
       container.innerHTML = '<div class="p-4 text-center text-[#8b949e] text-sm">Đang tải dữ liệu...</div>';
 
       try {
-        const res = await fetch(`${API_BASE}/todos/day?date=${date}`);
+          const res = await fetch(
+              `${API_BASE}/todos/day?date=${date}&userId=${userId}`
+          );
         const todos = await res.json();
         
         container.innerHTML = '';
@@ -191,7 +210,11 @@
           
           container.innerHTML += `
             <div class="flex items-start gap-3 p-3 border-b border-[#30363d] hover:bg-[#161b22] group transition-colors ${statusClass}">
-              <input type="checkbox" ${checkedAttr} disabled class="mt-1 w-4 h-4 rounded border-[#30363d] bg-[#0d1117] checked:bg-[#238636]">
+            <input
+                type="checkbox"
+                ${checkedAttr}
+                onchange="toggleComplete(${todo.id}, '${todo.title.replace(/'/g, "\\'")}', this.checked)"
+                class="mt-1 w-4 h-4 rounded border-[#30363d] bg-[#0d1117] checked:bg-[#238636]">
               <div class="flex-1 min-w-0">
                 <a href="#" class="text-base font-semibold text-[#c9d1d9] hover:text-[#58a6ff] block truncate">
                   ${todo.title}
@@ -210,7 +233,102 @@
         console.error("Lỗi tải Todo:", error);
         container.innerHTML = '<div class="p-4 text-center text-red-500 text-sm">Lỗi kết nối Server!</div>';
       }
-    }
+      }
+      async function toggleComplete(id, title, checked) {
+          try {
+              const res = await fetch(
+                  `${API_BASE}/todos/${id}?userId=${userId}`,
+                  {
+                      method: "PUT",
+                      headers: {
+                          "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify({
+                          title: title,
+                          isCompleted: checked
+                      })
+                  }
+              );
+
+              if (res.ok) {
+                  loadTodos();
+              } else {
+                  alert("Không thể cập nhật trạng thái.");
+              }
+          }
+          catch (err) {
+              console.error(err);
+              alert("Lỗi kết nối Backend.");
+          }
+      }
+      async function shareTodoList() {
+
+          const userId = Number(localStorage.getItem("currentUserId"));
+
+          if (!userId) {
+              alert("Bạn chưa đăng nhập.");
+              return;
+          }
+
+          const targetDate = document.getElementById("todoDate").value;
+
+          try {
+
+              const res = await fetch("/api/share", {
+
+                  method: "POST",
+
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+
+                  body: JSON.stringify({
+
+                      userId: userId,
+
+                      title: `Todo ngày ${targetDate}`,
+
+                      targetDate: targetDate,
+
+                      shareCode: ""
+
+                  })
+
+              });
+
+              if (!res.ok) {
+
+                  const text = await res.text();
+                  throw new Error(text);
+
+              }
+
+              const result = await res.json();
+
+              await navigator.clipboard.writeText(result.shareCode);
+
+              alert(
+                  `🎉 Chia sẻ thành công!
+
+                Tiêu đề:
+                ${result.title}
+
+                Share Code:
+                ${result.shareCode}
+
+                Đã tự động copy Share Code vào Clipboard.`
+                              );
+
+          }
+          catch (err) {
+
+              console.error(err);
+
+              alert("Không thể chia sẻ.");
+
+          }
+
+      }
   </script>
 </body>
 </html>

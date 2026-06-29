@@ -24,11 +24,19 @@ namespace StreakHub.API.Controllers
 
         // 7: Tạo 1 task mới
         [HttpPost]
-        public async Task<IActionResult> CreateTask([FromBody] TodoCreateRequest request, [FromQuery] string clientToday)
+        public async Task<IActionResult> CreateTask(
+            [FromBody] TodoCreateRequest request,
+            [FromQuery] string clientToday,
+            [FromQuery] int userId)
         {
             var today = DateOnly.Parse(clientToday);
-            var taskId = await _todoService.CreateSingleTaskAsync(GetCurrentUserId(), request, today);
-            return Ok(new { status = "success", id = taskId });
+
+            var id = await _todoService.CreateSingleTaskAsync(
+                userId,
+                request,
+                today);
+
+            return Ok(new { status = "success", id });
         }
 
         // 8: Tạo task lặp lại
@@ -42,17 +50,22 @@ namespace StreakHub.API.Controllers
 
         // 9: Cập nhật Task
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTask(int id, [FromBody] TodoUpdateRequest request)
+        public async Task<IActionResult> UpdateTask(
+            int id,
+            [FromBody] TodoUpdateRequest request,
+            [FromQuery] int userId)
         {
-            await _todoService.UpdateTaskAsync(id, GetCurrentUserId(), request);
+            await _todoService.UpdateTaskAsync(id, userId, request);
             return Ok(new { status = "success" });
         }
 
         // 10: Xóa Task
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTask(int id)
+        public async Task<IActionResult> DeleteTask(
+         int id,
+         [FromQuery] int userId)
         {
-            await _todoService.DeleteTaskAsync(id, GetCurrentUserId());
+            await _todoService.DeleteTaskAsync(id, userId);
             return Ok(new { status = "success" });
         }
 

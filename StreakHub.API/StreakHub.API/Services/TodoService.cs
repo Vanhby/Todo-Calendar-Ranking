@@ -104,7 +104,11 @@ namespace StreakHub.API.Services
             var todo = await _context.Todos.FirstOrDefaultAsync(t => t.Id == todoId && t.UserId == userId);
             if (todo == null) throw new Exception("Không tìm thấy task hoặc không có quyền thao tác");
 
-            todo.Title = request.Title;
+            if (!string.IsNullOrWhiteSpace(request.Title))
+            {
+                todo.Title = request.Title;
+            }
+
             todo.IsCompleted = request.IsCompleted;
             await _context.SaveChangesAsync();
         }
@@ -130,11 +134,13 @@ namespace StreakHub.API.Services
                 {
                     Id = t.Id,
                     Title = t.Title,
+                    TaskDate = t.TaskDate,
                     IsCompleted = t.IsCompleted,
                     Tags = t.TodoTags.Select(tt => new TagDTO
                     {
                         Id = tt.Tag.Id,
-                        Name = tt.Tag.Name
+                        Name = tt.Tag.Name,
+                        Color = tt.Tag.Color
                     }).ToList()
                 }).ToListAsync();
         }
@@ -163,6 +169,7 @@ namespace StreakHub.API.Services
                 {
                     Id = t.Id,
                     Title = t.Title,
+                    TaskDate = t.TaskDate,
                     IsCompleted = t.IsCompleted,
                     Tags = t.TodoTags.Select(tt => new TagDTO
                     {

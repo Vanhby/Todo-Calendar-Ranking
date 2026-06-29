@@ -23,8 +23,13 @@
     public class TodoResponse
     {
         public int Id { get; set; }
+
         public string Title { get; set; } = string.Empty;
+
+        public DateOnly TaskDate { get; set; }
+
         public bool IsCompleted { get; set; }
+
         public List<TagDTO> Tags { get; set; } = new();
     }
 }

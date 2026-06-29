@@ -275,7 +275,7 @@
                 if (tags.length === 0) {
                     container.innerHTML = '<span class="text-[11px] text-[#6e7681]">Chưa có nhãn nào.</span>';
                     return;
-        }
+                }
 
                 tags.forEach(tag => {
                     container.innerHTML += `
@@ -297,7 +297,7 @@
             if (!title) {
                 alert("Vui lòng nhập nội dung công việc!");
                 return;
-        }
+            }
 
             const checkboxes = document.querySelectorAll('.tag-form-checkbox:checked');
             const tagIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
@@ -341,50 +341,43 @@
                         // Chuyển định dạng YYYY-MM-DD thành Ngày DD/MM/YYYY
                         const [year, month, day] = targetDate.split('-');
                         titleEl.innerText = `Ngày ${day}/${month}/${year}`;
-            }
+                    }
+                    // 1. ÉP KIỂU LẤY ĐÚNG USER SỐ 7 (Cho giống Postman của bạn)
+                    const userId = localStorage.getItem('currentUserId') || 0;
 
-        .toggle-text {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #94a3b8;
-        }
-                // 1. ÉP KIỂU LẤY ĐÚNG USER SỐ 7 (Cho giống Postman của bạn)
-                const userId = localStorage.getItem('currentUserId') || 0;
+                    // 2. Nếu targetDate bị rỗng (xảy ra lỗi), lấy ngay ngày hôm nay đắp vào
+                    if (!targetDate) {
+                        targetDate = new Date().toISOString().split('T')[0];
+                    }
 
-                // 2. Nếu targetDate bị rỗng (xảy ra lỗi), lấy ngay ngày hôm nay đắp vào
-                if (!targetDate) {
-                    targetDate = new Date().toISOString().split('T')[0];
-            }
+                    // 3. Xử lý triệt để vụ dư dấu gạch chéo //
+                    const baseUrl = API_BASE.endsWith('/') ? API_BASE.slice(0, -1) : API_BASE;
 
-                // 3. Xử lý triệt để vụ dư dấu gạch chéo //
-                const baseUrl = API_BASE.endsWith('/') ? API_BASE.slice(0, -1) : API_BASE;
+                    // Tạo URL hoàn chỉnh
+                    const fetchUrl = `${baseUrl}/todos/day?date=${targetDate}&userId=${userId}`;
 
-                // Tạo URL hoàn chỉnh
-                const fetchUrl = `${baseUrl}/todos/day?date=${targetDate}&userId=${userId}`;
+                    // IN RA CONSOLE ĐỂ KIỂM TRA
+                    console.log("🌐 Trình duyệt đang gọi API:", fetchUrl);
 
-                // IN RA CONSOLE ĐỂ KIỂM TRA
-                console.log("🌐 Trình duyệt đang gọi API:", fetchUrl);
+                    const res = await fetch(fetchUrl);
+                    const todos = await res.json();
 
-                const res = await fetch(fetchUrl);
-                const todos = await res.json();
+                    pendingList.innerHTML = '';
+                    doneList.innerHTML = '';
 
-                pendingList.innerHTML = '';
-                doneList.innerHTML = '';
+                    let hasPending = false;
+                    let hasDone = false;
 
-                let hasPending = false;
-                let hasDone = false;
+                    // ... MỌI CODE XỬ LÝ HTML BÊN DƯỚI GIỮ NGUYÊN ...
+                    todos.forEach(todo => {
+                        let tagsHtml = '';
+                        if (todo.tags && todo.tags.length > 0) {
+                            todo.tags.forEach(t => {
+                                tagsHtml += `<span class="text-[10px] border px-1.5 py-0.2 rounded-full font-medium" style="border-color: ${t.color}; color: ${t.color};">${t.name}</span>`;
+                            });
+                        }
 
-                // ... MỌI CODE XỬ LÝ HTML BÊN DƯỚI GIỮ NGUYÊN ...
-                todos.forEach(todo => {
-                    let tagsHtml = '';
-                    if (todo.tags && todo.tags.length > 0) {
-                        todo.tags.forEach(t => {
-                            tagsHtml += `<span class="text-[10px] border px-1.5 py-0.2 rounded-full font-medium" style="border-color: ${t.color}; color: ${t.color};">${t.name}</span>`;
-                        });
-        }
-
-                    const itemHtml = `
+                        const itemHtml = `
                         <li class="flex items-start gap-2 p-2 rounded-md hover:bg-[#30363d] group transition-colors">
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-medium ${todo.isCompleted ? 'text-[#8b949e] line-through' : 'text-[#c9d1d9]'} truncate">${todo.title}</p>
@@ -393,23 +386,24 @@
                         </li>
                     `;
 
-                    if (todo.isCompleted) {
-                        doneList.innerHTML += itemHtml;
-                        hasDone = true;
-                    } else {
-                        pendingList.innerHTML += itemHtml;
-                        hasPending = true;
-        }
-                });
+                        if (todo.isCompleted) {
+                            doneList.innerHTML += itemHtml;
+                            hasDone = true;
+                        } else {
+                            pendingList.innerHTML += itemHtml;
+                            hasPending = true;
+                        }
+                    });
 
-                if (!hasPending) pendingList.innerHTML = '<li class="text-xs text-[#6e7681] italic p-1">Không có việc tồn đọng</li>';
-                if (!hasDone) doneList.innerHTML = '<li class="text-xs text-[#6e7681] italic p-1">Chưa hoàn thành việc nào</li>';
-
-            } catch (err) {
-                console.error("Lỗi kết nối API:", err);
-                pendingList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
-                doneList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
-        }
+                    if (!hasPending) pendingList.innerHTML = '<li class="text-xs text-[#6e7681] italic p-1">Không có việc tồn đọng</li>';
+                    if (!hasDone) doneList.innerHTML = '<li class="text-xs text-[#6e7681] italic p-1">Chưa hoàn thành việc nào</li>';
+                    }   
+                } catch (err) {
+                    console.error("Lỗi kết nối API:", err);
+                    pendingList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
+                    doneList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
+                }
+           
         }
 
         // ==========================================
@@ -561,21 +555,19 @@
                     const streakData = await streakRes.json();
                     // Giả sử API trả về { streak: 12 }
                     document.getElementById('streak-count').innerText = `${streakData.currentStreak || 0} days`;
-                    }
+                }
             } catch (err) {
                 console.error("Lỗi khi tải User/Streak:", err);
-                }
-            } catch (error) {
-                msgBox.className = "error";
-                msgBox.innerText = "Không thể kết nối đến hệ thống Backend.";
-                msgBox.style.display = "block";
             }
+        }
+
         function handleLogout() {
             // Xóa ID khỏi trình duyệt (Rút ví)
             localStorage.removeItem('currentUserId');
             // Đẩy về trang Đăng nhập
             window.location.href = "login.html";
         }
+     
     </script>
 </body>
 </html>

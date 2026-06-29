@@ -39,7 +39,33 @@ namespace StreakHub.API.Controllers
             var result = await _shareService.CreateShareAsync(dto);
             return Ok(result);
         }
+        // POST /api/share/import
+        [HttpPost("import")]
+        public async Task<IActionResult> ImportShare([FromBody] ImportShareDTO dto)
+        {
+            try
+            {
+                // Tạm thời giống StarController, hard-code user để demo
+                // Sau này thay bằng Session hoặc JWT
+                int currentUserId = 1;
 
+                var result = await _shareService.ImportSharedListAsync(currentUserId, dto);
+
+                return Ok(new
+                {
+                    success = result,
+                    message = "Import thành công."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
         // DELETE /api/shares/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShare(int id)

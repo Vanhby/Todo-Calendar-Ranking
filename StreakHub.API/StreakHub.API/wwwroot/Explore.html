@@ -23,12 +23,17 @@
         <span class="font-semibold text-[#c9d1d9]">Explore</span>
       </div>
 
-      <div class="flex-1 max-w-md">
-        <input
-          type="text"
-          placeholder="Nhập mã Share..."
-          class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] placeholder-[#6e7681] focus:outline-none focus:border-[#58a6ff]"
-        />
+      <div class="flex gap-2 mt-4">
+
+          <input id="shareCodeInput"
+                 placeholder="Nhập Share Code..."
+                 class="flex-1 rounded border p-2 text-black">
+
+          <button onclick="importShare()"
+                  class="bg-green-600 px-3 rounded">
+              Import
+          </button>
+
       </div>
 
       <button class="p-2 rounded-md border border-[#30363d] hover:border-[#c9d1d9]" aria-label="Thông báo">
@@ -69,7 +74,7 @@
           placeholder="VD: a1b2-c3d4"
           class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] placeholder-[#6e7681] focus:outline-none focus:border-[#58a6ff] mb-2"
         />
-        <button class="w-full bg-[#238636] hover:bg-[#2ea043] text-white text-sm font-medium rounded-md px-3 py-1.5">Mở Todolist</button>
+        <button class="w-full bg-[#238636] hover:bg-[#2ea043] text-white text-sm font-medium rounded-md px-3 py-1.5" onclick="openShare()">Mở Todolist</button>
       </div>
     </aside>
 
@@ -383,7 +388,7 @@
         }
 
         try {
-            const res = await fetch(`/api/ranking/toggle-star/${shareId}`, { method: 'POST' });
+            const res = await fetch(`/api/star/toggle-star/${shareId}`, { method: 'POST' });
             if (!res.ok) {
                 throw new Error("API lỗi");
             }
@@ -403,5 +408,59 @@
                 starCountElement.innerText = currentStars;
             }
         }
+    }
+    async function openShare() {
+
+        const code =
+            document.getElementById("shareCodeInput").value;
+
+        window.location.href =
+            `todo.html?code=${code}`;
+
+    }
+    async function importShare() {
+
+        const code = document
+            .getElementById("shareCodeInput")
+            .value
+            .trim();
+
+        if (!code) {
+            alert("Nhập Share Code.");
+            return;
+        }
+
+        const targetDate = prompt(
+            "Nhập ngày muốn import (YYYY-MM-DD)"
+        );
+
+        if (!targetDate) return;
+
+        const res = await fetch("/api/share/import", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                shareCode: code,
+
+                targetDate: targetDate,
+
+                selectedTodoIds: []
+
+            })
+
+        });
+
+        const data = await res.json();
+
+        if (res.ok)
+            alert("Import thành công!");
+        else
+            alert(data.message);
     }
 </script>
