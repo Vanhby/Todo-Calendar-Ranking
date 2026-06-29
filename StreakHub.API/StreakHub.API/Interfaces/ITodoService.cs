@@ -10,5 +10,7 @@ namespace StreakHub.API.Interfaces
         Task DeleteTaskAsync(int todoId, int userId);
         Task<List<TodoResponse>> GetTasksByDayAsync(int userId, DateOnly date);
         Task<List<TagDTO>> GetAllTagsAsync();
+        Task<List<TodoResponse>> GetTasksByShareIdAsync(int shareId);
+
     }
 }

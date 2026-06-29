@@ -22,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 
+
 builder.Services.AddScoped<IDndService, DndService>();
 builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddHostedService<EmailReminderWorker>(); 
@@ -29,6 +30,8 @@ builder.Services.AddScoped<IStreakService, StreakService>();
 builder.Services.AddScoped<IShareService, ShareService>();
 
 // CHỖ SỬA QUAN TRỌNG: Đăng ký TodoService của bạn để Controller gọi được qua Interface
+
+builder.Services.AddScoped<IRankingService, RankingService>();
 builder.Services.AddScoped<ITodoService, TodoService>();
 
 builder.Services.AddOpenApi();
@@ -58,6 +61,11 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 
 app.UseAuthorization();
+
+///////////////////////
+app.UseStaticFiles();
+///////////////////////
+
 app.MapControllers();
 
 app.Run();

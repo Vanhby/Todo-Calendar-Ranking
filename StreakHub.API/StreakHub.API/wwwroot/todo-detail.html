@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi" class="bg-[#0d1117]">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasks for June 18 - StreakHub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0d1117] text-[#c9d1d9] min-h-screen font-sans">
+
+  <input type="checkbox" id="drawer-toggle" class="peer hidden" />
+
+  <label
+    for="drawer-toggle"
+    class="fixed inset-0 z-30 bg-black/60 opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:pointer-events-auto transition-opacity"
+    aria-hidden="true"
+  ></label>
+
+  <aside class="fixed top-0 left-0 z-40 h-full w-72 bg-[#0d1117] border-r border-[#30363d] -translate-x-full peer-checked:translate-x-0 transition-transform duration-300 overflow-y-auto">
+    <div class="flex items-center justify-between px-4 py-3">
+      <svg height="32" viewBox="0 0 16 16" width="32" class="fill-[#c9d1d9]" aria-hidden="true">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+      </svg>
+      <label for="drawer-toggle" class="p-1 rounded-md hover:bg-[#30363d] cursor-pointer" aria-label="Đóng menu">
+        <svg height="20" viewBox="0 0 16 16" width="20" class="fill-[#c9d1d9]" aria-hidden="true">
+          <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
+        </svg>
+      </label>
+    </div>
+    <nav class="px-2 py-2 border-b border-[#30363d]">
+      <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium hover:bg-[#30363d]">
+        <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true"><path d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.231c0-.532.242-1.035.657-1.367l5.25-4.2Z"></path></svg>
+        Home
+      </a>
+    </nav>
+  </aside>
+
+  <header class="bg-[#161b22] border-b border-[#30363d] relative z-20">
+    <nav class="flex items-center justify-between px-4 py-3 gap-4">
+      <div class="flex items-center gap-3">
+        <label for="drawer-toggle" class="p-1.5 rounded-md hover:bg-[#30363d] cursor-pointer" aria-label="Mở menu">
+          <svg height="20" viewBox="0 0 16 16" width="20" class="fill-[#c9d1d9]" aria-hidden="true">
+            <path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path>
+          </svg>
+        </label>
+        <svg height="32" viewBox="0 0 16 16" width="32" class="fill-[#c9d1d9]" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+        </svg>
+        <span class="font-semibold text-[#c9d1d9] hidden sm:inline">StreakHub</span>
+      </div>
+    </nav>
+  </header>
+
+  <div class="p-6 max-w-screen-lg mx-auto">
+    
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-semibold text-[#c9d1d9]">Tasks for June 18, 2026</h1>
+      <button class="bg-[#238636] hover:bg-[#2ea043] text-white px-4 py-2 rounded-md text-sm font-medium transition-colors border border-[rgba(240,246,252,0.1)] shadow-sm">
+        New Task
+      </button>
+    </div>
+
+    <div class="mb-4">
+      <input type="text" placeholder="Search tasks..." class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#58a6ff] focus:ring-1 focus:ring-[#58a6ff] transition-all" />
+    </div>
+
+    <div class="border border-[#30363d] rounded-md bg-[#0d1117]">
+      
+      <div class="bg-[#161b22] border-b border-[#30363d] p-3 flex items-center gap-4 text-sm rounded-t-md">
+        <a href="#" class="flex items-center gap-1.5 text-[#c9d1d9] font-semibold hover:text-[#c9d1d9]">
+          <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path></svg>
+          3 Open
+        </a>
+        <a href="#" class="flex items-center gap-1.5 text-[#8b949e] font-normal hover:text-[#c9d1d9]">
+          <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#8b949e]"><path d="M11.28 6.78a.75.75 0 0 0-1.06-1.06L7.25 8.69 5.78 7.22a.75.75 0 0 0-1.06 1.06l2 2a.75.75 0 0 0 1.06 0l3.5-3.5Z"></path><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0Zm-1.5 0a6.5 6.5 0 1 0-13 0 6.5 6.5 0 0 0 13 0Z"></path></svg>
+          2 Closed
+        </a>
+      </div>
+
+      <div class="flex flex-col">
+        
+        <div class="flex items-start gap-3 p-3 border-b border-[#30363d] hover:bg-[#161b22] group transition-colors">
+          <input type="checkbox" class="mt-1 w-4 h-4 rounded border-[#30363d] bg-[#0d1117] checked:bg-[#238636] focus:ring-0 cursor-pointer" />
+          <div class="flex-1 min-w-0">
+            <a href="#" class="text-base font-semibold text-[#c9d1d9] hover:text-[#58a6ff] block truncate">
+              Học 20 từ tiếng Anh mới
+            </a>
+            <div class="mt-1 flex items-center gap-2 text-xs text-[#8b949e]">
+              <span>#10 opened 2 hours ago by @devuser</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center rounded-full border border-[#30363d] px-2 py-0.5 text-xs font-medium text-[#8b949e]">
+              study
+            </span>
+            <button class="opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-[#30363d] text-[#8b949e] hover:text-[#c9d1d9] transition-opacity">
+              <svg height="16" viewBox="0 0 16 16" width="16" class="fill-current"><path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 border-b border-[#30363d] hover:bg-[#161b22] group transition-colors">
+          <input type="checkbox" class="mt-1 w-4 h-4 rounded border-[#30363d] bg-[#0d1117] checked:bg-[#238636] focus:ring-0 cursor-pointer" />
+          <div class="flex-1 min-w-0">
+            <a href="#" class="text-base font-semibold text-[#c9d1d9] hover:text-[#58a6ff] block truncate">
+              Hoàn thành 1 commit cho side project
+            </a>
+            <div class="mt-1 flex items-center gap-2 text-xs text-[#8b949e]">
+              <span>#11 opened 5 hours ago by @devuser</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center rounded-full border border-[rgba(88,166,255,0.3)] bg-[rgba(88,166,255,0.1)] px-2 py-0.5 text-xs font-medium text-[#58a6ff]">
+              coding
+            </span>
+            <button class="opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-[#30363d] text-[#8b949e] hover:text-[#c9d1d9] transition-opacity">
+              <svg height="16" viewBox="0 0 16 16" width="16" class="fill-current"><path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 border-b border-[#30363d] hover:bg-[#161b22] group transition-colors">
+          <input type="checkbox" class="mt-1 w-4 h-4 rounded border-[#30363d] bg-[#0d1117] checked:bg-[#238636] focus:ring-0 cursor-pointer" />
+          <div class="flex-1 min-w-0">
+            <a href="#" class="text-base font-semibold text-[#c9d1d9] hover:text-[#58a6ff] block truncate">
+              Đọc 10 trang sách
+            </a>
+            <div class="mt-1 flex items-center gap-2 text-xs text-[#8b949e]">
+              <span>#12 opened 6 hours ago by @devuser</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center rounded-full border border-[#30363d] px-2 py-0.5 text-xs font-medium text-[#8b949e]">
+              habit
+            </span>
+            <button class="opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-[#30363d] text-[#8b949e] hover:text-[#c9d1d9] transition-opacity">
+              <svg height="16" viewBox="0 0 16 16" width="16" class="fill-current"><path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 border-b border-[#30363d] hover:bg-[#161b22] group transition-colors opacity-60">
+          <input type="checkbox" checked class="mt-1 w-4 h-4 rounded border-[#30363d] bg-[#0d1117] checked:bg-[#238636] focus:ring-0 cursor-pointer" />
+          <div class="flex-1 min-w-0">
+            <a href="#" class="text-base font-semibold text-[#8b949e] line-through block truncate">
+              Viết 30 phút nhật ký
+            </a>
+            <div class="mt-1 flex items-center gap-2 text-xs text-[#8b949e]">
+              <span>#8 closed yesterday</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center rounded-full border border-[#30363d] px-2 py-0.5 text-xs font-medium text-[#8b949e]">
+              habit
+            </span>
+            <button class="opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-[#30363d] text-[#8b949e] hover:text-[#c9d1d9] transition-opacity">
+              <svg height="16" viewBox="0 0 16 16" width="16" class="fill-current"><path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 hover:bg-[#161b22] group transition-colors opacity-60">
+          <input type="checkbox" checked class="mt-1 w-4 h-4 rounded border-[#30363d] bg-[#0d1117] checked:bg-[#238636] focus:ring-0 cursor-pointer" />
+          <div class="flex-1 min-w-0">
+            <a href="#" class="text-base font-semibold text-[#8b949e] line-through block truncate">
+              Tập thể dục buổi sáng
+            </a>
+            <div class="mt-1 flex items-center gap-2 text-xs text-[#8b949e]">
+              <span>#9 closed yesterday</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center rounded-full border border-[rgba(210,168,255,0.3)] bg-[rgba(210,168,255,0.1)] px-2 py-0.5 text-xs font-medium text-[#d2a8ff]">
+              health
+            </span>
+            <button class="opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-[#30363d] text-[#8b949e] hover:text-[#c9d1d9] transition-opacity">
+              <svg height="16" viewBox="0 0 16 16" width="16" class="fill-current"><path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
