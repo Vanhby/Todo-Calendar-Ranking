@@ -5,6 +5,7 @@ using StreakHub.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 1. Cấu hình CORS chuẩn (Chỉ khai báo DUY NHẤT 1 lần)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -15,6 +16,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+// 2. Kết nối Database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -22,7 +24,12 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IDndService, DndService>();
 builder.Services.AddScoped<IReminderService, ReminderService>();
-builder.Services.AddHostedService<EmailReminderWorker>();
+builder.Services.AddHostedService<EmailReminderWorker>(); 
+builder.Services.AddScoped<IStreakService, StreakService>();
+builder.Services.AddScoped<IShareService, ShareService>();
+
+// CHỖ SỬA QUAN TRỌNG: Đăng ký TodoService của bạn để Controller gọi được qua Interface
+builder.Services.AddScoped<ITodoService, TodoService>();
 
 builder.Services.AddOpenApi();
 
@@ -36,17 +43,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", builder =>
-    {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
 var app = builder.Build();
 
+// 4. Kích hoạt CORS (Gọi 1 lần sau khi Build app)
 app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
@@ -54,14 +53,11 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
-app.UseCors("AllowAll");
+//app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
