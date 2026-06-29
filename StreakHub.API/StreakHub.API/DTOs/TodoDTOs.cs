@@ -8,21 +8,18 @@
         public List<int> TagIds { get; set; } = new();
     }
 
-    // 8: POST /api/todos/recurring
     public class TodoRecurringRequest
     {
         public string Title { get; set; } = string.Empty;
         public string Pattern { get; set; } = string.Empty;
     }
 
-    // 9: PUT /api/todos/{id}
     public class TodoUpdateRequest
     {
         public string Title { get; set; } = string.Empty;
         public bool IsCompleted { get; set; }
     }
 
-    // 11: GET /api/todos/day
     public class TodoResponse
     {
         public int Id { get; set; }

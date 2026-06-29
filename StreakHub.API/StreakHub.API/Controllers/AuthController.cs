@@ -43,6 +43,7 @@ namespace StreakHub.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
+            // Thêm từ khóa 'await' tại đây
             var (isSuccess, statusMessage) = await _authService.Login(loginDto);
 
             if (!isSuccess)

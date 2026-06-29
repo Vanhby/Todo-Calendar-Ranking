@@ -251,7 +251,7 @@
             const todayStr = new Date().toISOString().split('T')[0];
             if (document.getElementById('inputTodoDate')) {
                 document.getElementById('inputTodoDate').value = todayStr;
-            }
+        }
             loadTags();
             loadTodosByDay(todayStr);
             setupCalendarEvents();
@@ -275,7 +275,7 @@
                 if (tags.length === 0) {
                     container.innerHTML = '<span class="text-[11px] text-[#6e7681]">Chưa có nhãn nào.</span>';
                     return;
-                }
+        }
 
                 tags.forEach(tag => {
                     container.innerHTML += `
@@ -297,7 +297,7 @@
             if (!title) {
                 alert("Vui lòng nhập nội dung công việc!");
                 return;
-            }
+        }
 
             const checkboxes = document.querySelectorAll('.tag-form-checkbox:checked');
             const tagIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
@@ -341,15 +341,21 @@
                         // Chuyển định dạng YYYY-MM-DD thành Ngày DD/MM/YYYY
                         const [year, month, day] = targetDate.split('-');
                         titleEl.innerText = `Ngày ${day}/${month}/${year}`;
-                    }
-                }
+            }
+
+        .toggle-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
                 // 1. ÉP KIỂU LẤY ĐÚNG USER SỐ 7 (Cho giống Postman của bạn)
                 const userId = localStorage.getItem('currentUserId') || 0;
 
                 // 2. Nếu targetDate bị rỗng (xảy ra lỗi), lấy ngay ngày hôm nay đắp vào
                 if (!targetDate) {
                     targetDate = new Date().toISOString().split('T')[0];
-                }
+            }
 
                 // 3. Xử lý triệt để vụ dư dấu gạch chéo //
                 const baseUrl = API_BASE.endsWith('/') ? API_BASE.slice(0, -1) : API_BASE;
@@ -376,7 +382,7 @@
                         todo.tags.forEach(t => {
                             tagsHtml += `<span class="text-[10px] border px-1.5 py-0.2 rounded-full font-medium" style="border-color: ${t.color}; color: ${t.color};">${t.name}</span>`;
                         });
-                    }
+        }
 
                     const itemHtml = `
                         <li class="flex items-start gap-2 p-2 rounded-md hover:bg-[#30363d] group transition-colors">
@@ -393,7 +399,7 @@
                     } else {
                         pendingList.innerHTML += itemHtml;
                         hasPending = true;
-                    }
+        }
                 });
 
                 if (!hasPending) pendingList.innerHTML = '<li class="text-xs text-[#6e7681] italic p-1">Không có việc tồn đọng</li>';
@@ -403,7 +409,7 @@
                 console.error("Lỗi kết nối API:", err);
                 pendingList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
                 doneList.innerHTML = '<li class="text-xs text-red-500/80 p-1">Lỗi kết nối API!</li>';
-            }
+        }
         }
 
         // ==========================================
@@ -471,7 +477,7 @@
 
             monthSelect.addEventListener("change", (e) => { viewMonth = parseInt(e.target.value); renderCalendar(); });
             yearSelect.addEventListener("change", (e) => { viewYear = parseInt(e.target.value); renderCalendar(); });
-        }
+            }
 
         function changeMonth(delta) {
             viewMonth += delta;
@@ -524,7 +530,7 @@
                         const backendMonthStr = String(viewMonth + 1).padStart(2, '0');
                         const dayStr = String(dayNum).padStart(2, '0');
                         loadTodosByDay(`${viewYear}-${backendMonthStr}-${dayStr}`);
-                    });
+                });
 
                     if (dayNum === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
                         cell.style.borderColor = "#58a6ff";
@@ -555,11 +561,15 @@
                     const streakData = await streakRes.json();
                     // Giả sử API trả về { streak: 12 }
                     document.getElementById('streak-count').innerText = `${streakData.currentStreak || 0} days`;
-                }
+                    }
             } catch (err) {
                 console.error("Lỗi khi tải User/Streak:", err);
+                }
+            } catch (error) {
+                msgBox.className = "error";
+                msgBox.innerText = "Không thể kết nối đến hệ thống Backend.";
+                msgBox.style.display = "block";
             }
-        }
         function handleLogout() {
             // Xóa ID khỏi trình duyệt (Rút ví)
             localStorage.removeItem('currentUserId');

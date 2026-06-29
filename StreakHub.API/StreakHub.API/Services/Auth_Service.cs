@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using BCrypt.Net;
 using StreakHub.API.Data;
+using StreakHub.API.DataToObject;
 using StreakHub.API.Models;
 namespace StreakHub.API.Service
 {

@@ -26,6 +26,8 @@ builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddHostedService<EmailReminderWorker>();
 builder.Services.AddScoped<IStreakService, StreakService>();
 builder.Services.AddScoped<IShareService, ShareService>();
+
+builder.Services.AddScoped<IRankingService, RankingService>();// CHỖ SỬA QUAN TRỌNG: Đăng ký TodoService của bạn để Controller gọi được qua Interface
 builder.Services.AddScoped<ITodoService, TodoService>();
 
 builder.Services.AddOpenApi();
@@ -47,7 +49,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseCors("AllowAll");
+//app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
 app.UseSession();
 
 // Cần để 2 dòng này trước Authorization và MapControllers để phục vụ file tĩnh trong wwwroot
@@ -56,6 +60,11 @@ app.UseStaticFiles();
 
 //app.UseHttpsRedirection();
 app.UseAuthorization();
+
+///////////////////////
+app.UseStaticFiles();
+///////////////////////
+
 app.MapControllers();
 
 app.Run();
