@@ -9,6 +9,6 @@ namespace StreakHub.API.Interfaces
         Task UpdateTaskAsync(int todoId, int userId, TodoUpdateRequest request);
         Task DeleteTaskAsync(int todoId, int userId);
         Task<List<TodoResponse>> GetTasksByDayAsync(int userId, DateOnly date);
-        Task<List<TagDTO>> GetAllTagsAsync();
+        //Task<List<TagDTO>> GetAllTagsAsync();
     }
 }

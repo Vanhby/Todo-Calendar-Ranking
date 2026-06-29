@@ -140,15 +140,15 @@ namespace StreakHub.API.Services
         }
 
         // 12: Lấy DS Nhãn (Tags)
-        public async Task<List<TagDTO>> GetAllTagsAsync()
-        {
-            return await _context.Tags
-                .Select(t => new TagDTO
-                {
-                    Id = t.Id,
-                    Name = t.Name,
-                    Color = t.Color 
-                }).ToListAsync();
-        }
+        //public async Task<List<TagDTO>> GetAllTagsAsync()
+        //{
+        //    return await _context.Tags
+        //        .Select(t => new TagDTO
+        //        {
+        //            Id = t.Id,
+        //            Name = t.Name,
+        //            Color = t.Color 
+        //        }).ToListAsync();
+        //}
     }
 }
