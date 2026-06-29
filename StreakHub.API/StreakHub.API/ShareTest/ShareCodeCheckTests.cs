@@ -15,6 +15,7 @@ namespace StreakHub.API.Tests
             _ShareService = new ShareService();
         }
 
+        [TestCase("", false)]
         [TestCase("Ab1", false)]   //min-1
         [TestCase("Ab12", true)]  //min
         [TestCase("Abc12", true)] //min+1
@@ -24,17 +25,17 @@ namespace StreakHub.API.Tests
         [TestCase("Code1234512345123", false)] //max+1
 
         //ký tự đặc biệt
-        [TestCase("", false)]
-        [TestCase("Abc$$", false)]
-        [TestCase("A b c", false)]
+        [TestCase("!@#$%^&*", false)]
+        [TestCase("A b c d e", false)]
         [TestCase("Code_123", false)]
 
         //dữ liệu lỗi giả
         [TestCase("Code_123", true)]
         [TestCase("", true)]
+        [TestCase("realcode", false)]
+        [TestCase("validCode", false)]
 
-        [Test]
-        public void ValidateShareCode_CheckShareCodeValidity_ReturnsExpectedBoolean(string inputShareCode, bool expectedResult)
+        public void ValidateShareCodeTest(string inputShareCode, bool expectedResult)
         {
             bool actualResult = _ShareService.ValidateShareCode(inputShareCode);
 
