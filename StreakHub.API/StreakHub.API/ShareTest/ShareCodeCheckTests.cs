@@ -35,6 +35,7 @@ namespace StreakHub.API.Tests
         [TestCase("realcode", false)]
         [TestCase("validCode", false)]
 
+        [Test]
         public void ValidateShareCodeTest(string inputShareCode, bool expectedResult)
         {
             bool actualResult = _ShareService.ValidateShareCode(inputShareCode);
