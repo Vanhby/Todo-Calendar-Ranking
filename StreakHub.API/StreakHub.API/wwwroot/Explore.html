@@ -282,13 +282,10 @@
         let todosHtml = '';
         if (item.todos && item.todos.length > 0) {
             todosHtml = item.todos.map(todo => {
-                const isCompleted = todo.isCompleted || todo.IsCompleted;
                 const todoTitle = todo.title || todo.Title || 'Untitled Task';
 
-                // Icon checkmark xanh cho task hoàn thành, icon tròn xám cho task chưa hoàn thành
                 const icon = `<span class="mr-2 text-[#8b949e] flex-shrink-0">-</span>`;
 
-                // Gạch ngang và làm mờ text nếu task đã xong
                 const textClass = 'text-[#c9d1d9]';
 
                 return `
