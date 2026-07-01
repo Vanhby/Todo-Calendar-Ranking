@@ -230,7 +230,7 @@
         // file: js/main.js
 
         const BASE_URL = "/api";
-        const USER_ID = 1;
+        const USER_ID = localStorage.getItem('currentUserId') || 1;
 
         let activeDashboardReminders = [];
         let dndSettings = null;
@@ -304,19 +304,21 @@
             if (!card) return;
 
             try {
-                const res = await fetch(`${BASE_URL}/auth/me`);
+                const res = await fetch(`${BASE_URL}/auth/me/${USER_ID}`);
                 if (res.ok) {
-                    const user = await res.json();
+                    const response = await res.json();
+
+                    const user = response.data;
                     card.innerHTML = `
-                    <img
-                        src="${user.avatarUrl || "https://avatars.githubusercontent.com/u/583231?v=4"}"
-                        alt="Ảnh đại diện người dùng"
-                        class="w-24 h-24 rounded-full border border-[#30363d] mb-3"
-                        onerror="this.src='https://avatars.githubusercontent.com/u/583231?v=4'"
-                    />
-                    <h1 class="text-lg font-semibold text-[#c9d1d9]">${user.username || "User"}</h1>
-                    <p class="text-sm text-[#6e7681]">@${user.username || "unknown"}</p>
-                `;
+                            <img
+                                src="${user.avatarUrl || "https://avatars.githubusercontent.com/u/583231?v=4"}"
+                                alt="Ảnh đại diện người dùng"
+                                class="w-24 h-24 rounded-full border border-[#30363d] mb-3"
+                                onerror="this.src='https://avatars.githubusercontent.com/u/583231?v=4'"
+                            />
+                            <h1 class="text-lg font-semibold text-[#c9d1d9]">${user.username || "User"}</h1>
+                            <p class="text-sm text-[#6e7681]">@${user.username || "unknown"}</p>
+                        `;
                 } else {
                     renderAnonymousProfile(card);
                 }
@@ -327,13 +329,13 @@
 
         function renderAnonymousProfile(card) {
             card.innerHTML = `
-            <div class="w-24 h-24 rounded-full bg-[#30363d] flex items-center justify-center mb-3">
-                <svg height="40" viewBox="0 0 16 16" width="40" class="fill-[#6e7681]" aria-hidden="true">
-                    <path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.432-5.142 3.999 3.999 0 1 1 5.122 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"/>
-                </svg>
-            </div>
-            <p class="text-sm text-[#6e7681]">Chưa đăng nhập</p>
-        `;
+                    <div class="w-24 h-24 rounded-full bg-[#30363d] flex items-center justify-center mb-3">
+                        <svg height="40" viewBox="0 0 16 16" width="40" class="fill-[#6e7681]" aria-hidden="true">
+                            <path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.432-5.142 3.999 3.999 0 1 1 5.122 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-[#6e7681]">Chưa đăng nhập</p>
+                `;
         }
 
         // ─────────────────────────────────────────────────────────────────────────────
@@ -575,19 +577,19 @@
                         li.className = `flex items-start gap-3 px-4 py-3 hover:bg-[#0d1117] transition-colors cursor-pointer ${reminder.isRead ? "opacity-60" : ""}`;
 
                         li.innerHTML = `
-                        <div class="mt-0.5 flex-shrink-0">
-                            <div style="width:8px;height:8px;border-radius:50%;background:${reminder.isRead ? 'transparent' : '#58a6ff'};border:${reminder.isRead ? '1px solid #30363d' : 'none'};margin-top:4px;"></div>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm text-[#c9d1d9] truncate">${reminder.title}</p>
-                            <p class="text-xs text-[#8b949e] mt-0.5">${formatDisplayTime(reminder.notifyTime)}</p>
-                        </div>
-                        ${!reminder.isRead ? `
-                            <button class="mark-read-btn flex-shrink-0 text-xs text-[#58a6ff] hover:underline" onclick="markReminderAsRead(${reminder.id}, event)">
-                                Đọc
-                            </button>
-                        ` : ""}
-                    `;
+                                <div class="mt-0.5 flex-shrink-0">
+                                    <div style="width:8px;height:8px;border-radius:50%;background:${reminder.isRead ? 'transparent' : '#58a6ff'};border:${reminder.isRead ? '1px solid #30363d' : 'none'};margin-top:4px;"></div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm text-[#c9d1d9] truncate">${reminder.title}</p>
+                                    <p class="text-xs text-[#8b949e] mt-0.5">${formatDisplayTime(reminder.notifyTime)}</p>
+                                </div>
+                                ${!reminder.isRead ? `
+                                    <button class="mark-read-btn flex-shrink-0 text-xs text-[#58a6ff] hover:underline" onclick="markReminderAsRead(${reminder.id}, event)">
+                                        Đọc
+                                    </button>
+                                ` : ""}
+                            `;
                         list.appendChild(li);
                     });
                 }
@@ -670,12 +672,12 @@
 
                     if (activeDashboardReminders.length === 0) {
                         tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="4" class="py-8 text-center text-xs text-[#8b949e]">
-                                Chưa có lịch nhắc nhở nào được thiết lập. Hãy tạo một cái ở trên!
-                            </td>
-                        </tr>
-                    `;
+                                <tr>
+                                    <td colspan="4" class="py-8 text-center text-xs text-[#8b949e]">
+                                        Chưa có lịch nhắc nhở nào được thiết lập. Hãy tạo một cái ở trên!
+                                    </td>
+                                </tr>
+                            `;
                         return;
                     }
 
@@ -691,27 +693,27 @@
                             : `<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-[#30363d] text-[#8b949e]">Đã gửi</span>`;
 
                         tr.innerHTML = `
-                        <td class="py-3 px-4 text-sm font-medium text-[#c9d1d9] max-w-[200px] truncate">${reminder.title}</td>
-                        <td class="py-3 px-4">
-                            <div id="time-display-${reminder.id}">
-                                <span class="text-[#8b949e] text-xs">${formatDisplayTime(reminder.notifyTime)}</span>
-                            </div>
-                            <div id="time-edit-${reminder.id}" class="hidden flex items-center gap-1.5 mt-1">
-                                <input type="datetime-local" id="input-edit-${reminder.id}" class="bg-[#0d1117] border border-[#30363d] rounded px-1.5 py-0.5 text-xs text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff]">
-                                <button class="px-2 py-0.5 bg-[#238636] hover:bg-[#2ea043] text-white rounded text-[10px] font-semibold" onclick="saveReschedule(${reminder.id})">Lưu</button>
-                                <button class="px-2 py-0.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-[#c9d1d9] rounded text-[10px]" onclick="toggleEditTime(${reminder.id}, false)">Hủy</button>
-                            </div>
-                        </td>
-                        <td class="py-3 px-4">${statusBadge}</td>
-                        <td class="py-3 px-4 text-right">
-                            <div class="flex items-center justify-end gap-3">
-                                ${isFuture ? `
-                                    <button class="text-xs text-[#58a6ff] hover:underline" onclick="toggleEditTime(${reminder.id}, true)">Đổi lịch</button>
-                                ` : ""}
-                                <button class="text-xs text-[#f78166] hover:underline" onclick="deleteDashboardReminder(${reminder.id})">Xóa</button>
-                            </div>
-                        </td>
-                    `;
+                                <td class="py-3 px-4 text-sm font-medium text-[#c9d1d9] max-w-[200px] truncate">${reminder.title}</td>
+                                <td class="py-3 px-4">
+                                    <div id="time-display-${reminder.id}">
+                                        <span class="text-[#8b949e] text-xs">${formatDisplayTime(reminder.notifyTime)}</span>
+                                    </div>
+                                    <div id="time-edit-${reminder.id}" class="hidden flex items-center gap-1.5 mt-1">
+                                        <input type="datetime-local" id="input-edit-${reminder.id}" class="bg-[#0d1117] border border-[#30363d] rounded px-1.5 py-0.5 text-xs text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff]">
+                                        <button class="px-2 py-0.5 bg-[#238636] hover:bg-[#2ea043] text-white rounded text-[10px] font-semibold" onclick="saveReschedule(${reminder.id})">Lưu</button>
+                                        <button class="px-2 py-0.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-[#c9d1d9] rounded text-[10px]" onclick="toggleEditTime(${reminder.id}, false)">Hủy</button>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">${statusBadge}</td>
+                                <td class="py-3 px-4 text-right">
+                                    <div class="flex items-center justify-end gap-3">
+                                        ${isFuture ? `
+                                            <button class="text-xs text-[#58a6ff] hover:underline" onclick="toggleEditTime(${reminder.id}, true)">Đổi lịch</button>
+                                        ` : ""}
+                                        <button class="text-xs text-[#f78166] hover:underline" onclick="deleteDashboardReminder(${reminder.id})">Xóa</button>
+                                    </div>
+                                </td>
+                            `;
                         tableBody.appendChild(tr);
                     });
                 }
@@ -853,7 +855,7 @@
                     loadMoreBtn.classList.remove('hidden');
                     loadMoreBtn.disabled = false;
                     loadMoreBtn.innerHTML = `Xem thêm trending todolists
-                <svg height="14" viewBox="0 0 16 16" width="14" class="fill-[#58a6ff] inline-block ml-1" aria-hidden="true"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>`;
+                        <svg height="14" viewBox="0 0 16 16" width="14" class="fill-[#58a6ff] inline-block ml-1" aria-hidden="true"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>`;
                 }
 
             } catch (error) {
@@ -879,53 +881,53 @@
                     const icon = `<span class="mr-2 text-[#8b949e] flex-shrink-0">-</span>`;
                     const textClass = 'text-[#c9d1d9]';
                     return `
-                <li class="flex items-start gap-2">
-                    ${icon}
-                    <span class="text-sm ${textClass}">${todoTitle}</span>
-                </li>
-            `;
+                        <li class="flex items-start gap-2">
+                            ${icon}
+                            <span class="text-sm ${textClass}">${todoTitle}</span>
+                        </li>
+                    `;
                 }).join('');
             } else {
                 todosHtml = `<li class="text-sm text-[#6e7681] italic">Không có công việc nào trong danh sách này.</li>`;
             }
 
             return `
-          <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div class="flex items-center gap-2">
-                <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
-                <a href="/share/${item.shareId}" class="text-[#58a6ff] font-semibold hover:underline">${item.username} / ${title}</a>
-              </div>
-              <button onclick="toggleStarEffect(event, ${item.shareId})" class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0 transition-colors">
-                <svg height="12" viewBox="0 0 16 16" width="12" class="fill-current text-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-                <span class="star-text">Star</span>
-              </button>
-            </div>
+                  <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                      <div class="flex items-center gap-2">
+                        <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
+                        <a href="/share/${item.shareId}" class="text-[#58a6ff] font-semibold hover:underline">${item.username} / ${title}</a>
+                      </div>
+                      <button onclick="toggleStarEffect(event, ${item.shareId})" class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0 transition-colors">
+                        <svg height="12" viewBox="0 0 16 16" width="12" class="fill-current text-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                        <span class="star-text">Star</span>
+                      </button>
+                    </div>
 
-            <div class="text-sm text-[#8b949e] mb-3">
-              Mục tiêu: <span class="text-[#c9d1d9]">${targetDateStr}</span> • Đã tạo: <span class="text-[#c9d1d9]">${createdAtStr}</span>
-            </div>
+                    <div class="text-sm text-[#8b949e] mb-3">
+                      Mục tiêu: <span class="text-[#c9d1d9]">${targetDateStr}</span> • Đã tạo: <span class="text-[#c9d1d9]">${createdAtStr}</span>
+                    </div>
 
-            <div class="mb-4 bg-[#0d1117] border border-[#30363d] rounded-md p-3 max-h-48 overflow-y-auto">
-                <ul class="space-y-1.5">
-                    ${todosHtml}
-                </ul>
-            </div>
+                    <div class="mb-4 bg-[#0d1117] border border-[#30363d] rounded-md p-3 max-h-48 overflow-y-auto">
+                        <ul class="space-y-1.5">
+                            ${todosHtml}
+                        </ul>
+                    </div>
 
-            <div class="flex items-center gap-4 text-xs text-[#6e7681]">
-              <span class="flex items-center gap-1">
-                <span class="w-3 h-3 rounded-full bg-[#39d353] inline-block"></span>
-                ${item.category || 'General'}
-              </span>
-              <span class="flex items-center gap-1 hover:text-[#58a6ff] cursor-pointer">
-                <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-                <span class="star-count">${item.totalStars || 0}</span>
-              </span>
-              <span>${item.usesCount || 0} lượt dùng</span>
-              <span class="bg-[#21262d] px-2 py-0.5 rounded text-[#c9d1d9] border border-[#30363d]">Share code: <span class="font-mono text-[#58a6ff]">${item.shareCode || 'N/A'}</span></span>
-            </div>
-          </article>
-        `;
+                    <div class="flex items-center gap-4 text-xs text-[#6e7681]">
+                      <span class="flex items-center gap-1">
+                        <span class="w-3 h-3 rounded-full bg-[#39d353] inline-block"></span>
+                        ${item.category || 'General'}
+                      </span>
+                      <span class="flex items-center gap-1 hover:text-[#58a6ff] cursor-pointer">
+                        <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                        <span class="star-count">${item.totalStars || 0}</span>
+                      </span>
+                      <span>${item.usesCount || 0} lượt dùng</span>
+                      <span class="bg-[#21262d] px-2 py-0.5 rounded text-[#c9d1d9] border border-[#30363d]">Share code: <span class="font-mono text-[#58a6ff]">${item.shareCode || 'N/A'}</span></span>
+                    </div>
+                  </article>
+                `;
         }
 
         window.toggleStarEffect = async function (event, shareId) {
