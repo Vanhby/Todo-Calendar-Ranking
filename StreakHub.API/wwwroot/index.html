@@ -303,8 +303,9 @@
             const tagIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
 
             try {
+                const userId = localStorage.getItem('currentUserId') || 0;
                 const todayStr = new Date().toISOString().split('T')[0];
-                const res = await fetch(`${API_BASE}/todos?clientToday=${todayStr}`, {
+                const res = await fetch(`${API_BASE}/todos?clientToday=${todayStr}&userId=${userId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ title, taskDate, tagIds })
