@@ -9,6 +9,7 @@
 </head>
 <body class="bg-[#0d1117] text-[#c9d1d9] min-h-screen font-sans">
 
+    <!-- Navbar -->
     <header class="bg-[#161b22] border-b border-[#30363d]">
         <nav class="flex items-center justify-between px-4 py-3 gap-4">
             <div class="flex items-center gap-3">
@@ -31,7 +32,8 @@
                        class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] placeholder-[#6e7681] focus:outline-none focus:border-[#58a6ff]" />
             </div>
 
-            <div id="reminder-container" class="relative">
+            <div id="reminder-container"
+                 class="relative">
                 <button id="bell-btn"
                         class="relative p-2 rounded-md border border-[#30363d] hover:border-[#c9d1d9] focus:outline-none transition-colors"
                         aria-label="Thông báo">
@@ -48,6 +50,7 @@
                         <button id="mark-all-read-btn" class="text-xs text-[#6e7681] hover:text-[#58a6ff]">Đánh dấu đã đọc</button>
                     </div>
                     <ul id="reminder-list" class="max-h-80 overflow-y-auto">
+                        <!-- Reminders will be rendered here dynamically -->
                     </ul>
                     <a href="#" class="block px-4 py-2 text-center text-sm text-[#58a6ff] hover:underline border-t border-[#30363d] rounded-b-md bg-[#0d1117]">
                         Xem tất cả thông báo
@@ -57,8 +60,10 @@
         </nav>
     </header>
 
+    <!-- Layout 3 cột -->
     <div class="flex flex-col lg:flex-row gap-6 p-6 max-w-screen-2xl mx-auto">
 
+        <!-- Sidebar trái -->
         <aside class="w-full lg:w-72 flex-shrink-0">
             <div id="user-profile-card"
                  class="bg-[#161b22] border border-[#30363d] rounded-md p-4 mb-4 text-center">
@@ -73,6 +78,7 @@
                 <a href="#" class="block px-4 py-3 text-sm text-[#58a6ff] hover:underline">1 starred todolist</a>
             </div>
 
+            <!-- Nhập mã code todo -->
             <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4 mt-4">
                 <div class="flex items-center gap-2 mb-3">
                     <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#c9d1d9]" aria-hidden="true"><path d="M4.72 3.22a.75.75 0 0 1 1.06 1.06L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Zm6.56 0a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.75.75 0 0 1 0-1.06Z"></path></svg>
@@ -84,6 +90,7 @@
                 <button class="w-full bg-[#238636] hover:bg-[#2ea043] text-white text-sm font-medium rounded-md px-3 py-1.5">Mở Todolist</button>
             </div>
 
+            <!-- Phan DnD -->
             <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4 mt-4">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
@@ -127,7 +134,9 @@
             </div>
         </aside>
 
+        <!-- Cột giữa: Trending todolists -->
         <main class="flex-1 min-w-0">
+            <!-- Tabs -->
             <nav class="flex items-center gap-6 border-b border-[#30363d] mb-6 text-sm overflow-x-auto">
                 <a href="#" class="pb-3 border-b-2 border-[#f78166] font-semibold text-[#c9d1d9] whitespace-nowrap">Explore</a>
                 <a href="#" class="pb-3 text-[#6e7681] hover:text-[#c9d1d9] whitespace-nowrap">Topics</a>
@@ -136,32 +145,86 @@
                 <a href="#" class="pb-3 text-[#6e7681] hover:text-[#c9d1d9] whitespace-nowrap">Events</a>
             </nav>
 
-            <div class="flex items-center justify-between mb-6">
-                <h1 class="text-2xl font-semibold text-[#c9d1d9]">Trending Todolists</h1>
+            <h1 class="text-2xl font-semibold text-[#c9d1d9] mb-6">Trending Todolists hôm nay</h1>
 
-                <div class="relative">
-                    <select id="timeFilter" class="appearance-none bg-[#161b22] border border-[#30363d] text-[#c9d1d9] text-sm rounded-md pl-3 pr-8 py-1.5 focus:outline-none focus:border-[#58a6ff] cursor-pointer">
-                        <option value="today">Hôm nay</option>
-                        <option value="week">Cả tuần</option>
-                        <option value="all">Từ trước đến nay</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#6e7681]">
-                        <svg height="16" width="16" viewBox="0 0 16 16" class="fill-current" aria-hidden="true">
-                            <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
-                        </svg>
+            <div class="space-y-4">
+                <!-- Card todolist 1 -->
+                <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <div class="flex items-center gap-2">
+                            <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
+                            <a href="#" class="text-[#58a6ff] font-semibold hover:underline">duclananh / Morning Routine</a>
+                        </div>
+                        <button class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0">
+                            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                            Star
+                        </button>
                     </div>
-                </div>
+                    <p class="text-sm text-[#6e7681] mb-3">Thói quen buổi sáng giúp bạn bắt đầu ngày mới hiệu quả: thiền, tập thể dục, đọc sách.</p>
+                    <div class="flex items-center gap-4 text-xs text-[#6e7681]">
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#39d353] inline-block"></span>Habit</span>
+                        <span class="flex items-center gap-1">
+                            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                            4.9
+                        </span>
+                        <span>2.3k lượt dùng</span>
+                    </div>
+                </article>
+
+                <!-- Card todolist 2 -->
+                <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <div class="flex items-center gap-2">
+                            <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
+                            <a href="#" class="text-[#58a6ff] font-semibold hover:underline">minhtri / Workout Plan</a>
+                        </div>
+                        <button class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0">
+                            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                            Star
+                        </button>
+                    </div>
+                    <p class="text-sm text-[#6e7681] mb-3">Lịch tập luyện 6 ngày/tuần cho người mới: push, pull, legs và cardio xen kẽ.</p>
+                    <div class="flex items-center gap-4 text-xs text-[#6e7681]">
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#26a641] inline-block"></span>Fitness</span>
+                        <span class="flex items-center gap-1">
+                            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                            4.7
+                        </span>
+                        <span>1.8k lượt dùng</span>
+                    </div>
+                </article>
+
+                <!-- Card todolist 3 -->
+                <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <div class="flex items-center gap-2">
+                            <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
+                            <a href="#" class="text-[#58a6ff] font-semibold hover:underline">lan.pham / Study English 90 Days</a>
+                        </div>
+                        <button class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0">
+                            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                            Star
+                        </button>
+                    </div>
+                    <p class="text-sm text-[#6e7681] mb-3">Lộ trình học tiếng Anh 90 ngày: từ vựng, nghe, nói mỗi ngày một chút.</p>
+                    <div class="flex items-center gap-4 text-xs text-[#6e7681]">
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#006d32] inline-block"></span>Learning</span>
+                        <span class="flex items-center gap-1">
+                            <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#e3b341]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                            4.6
+                        </span>
+                        <span>1.2k lượt dùng</span>
+                    </div>
+                </article>
             </div>
 
-            <div id="trendingContainer" class="space-y-4">
-            </div>
-
-            <button id="loadMoreBtn" class="inline-flex items-center gap-1 mt-6 text-sm text-[#58a6ff] hover:underline focus:outline-none">
+            <a href="#" class="inline-flex items-center gap-1 mt-4 text-sm text-[#58a6ff] hover:underline">
                 Xem thêm trending todolists
                 <svg height="14" viewBox="0 0 16 16" width="14" class="fill-[#58a6ff]" aria-hidden="true"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-            </button>
+            </a>
         </main>
 
+        <!-- Cột phải: Trending users -->
         <aside class="w-full lg:w-80 flex-shrink-0">
             <div class="bg-[#161b22] border border-[#30363d] rounded-md p-4">
                 <div class="flex items-center gap-2 mb-4">
@@ -230,52 +293,20 @@
         // file: js/main.js
 
         const BASE_URL = "/api";
-        const USER_ID = 1;
+        const USER_ID = localStorage.getItem('currentUserId') || 1;
 
         let activeDashboardReminders = [];
+        // DND settings initialized to null — state is loaded from the API, not preset
         let dndSettings = null;
+
         let dndOn = false;
 
-        // Variables cho phần Trending
-        let currentSkip = 0;
-        const takeLimit = 10;
-        let timeFilterSelect;
-        let trendingContainer;
-        let loadMoreBtn;
-
         document.addEventListener("DOMContentLoaded", () => {
-            // Gọi logic khởi tạo cũ
             loadUserProfile();
             loadTasks();
             setupDnd();
             setupReminders();
             setupReminderDashboard();
-
-            // Khởi tạo biến cho Trending Share
-            timeFilterSelect = document.getElementById('timeFilter');
-            trendingContainer = document.getElementById('trendingContainer');
-            loadMoreBtn = document.getElementById('loadMoreBtn');
-
-            // Thêm event listeners cho tính năng Trending Share
-            if (timeFilterSelect) {
-                timeFilterSelect.addEventListener('change', () => {
-                    currentSkip = 0;
-                    loadTrendingData(false);
-                });
-            }
-
-            if (loadMoreBtn) {
-                loadMoreBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    currentSkip += takeLimit;
-                    loadTrendingData(true);
-                });
-            }
-
-            // Tải dữ liệu Trending lần đầu
-            if (trendingContainer) {
-                loadTrendingData(false);
-            }
         });
 
         // ─────────────────────────────────────────────────────────────────────────────
@@ -306,7 +337,9 @@
             try {
                 const res = await fetch(`${BASE_URL}/auth/me`);
                 if (res.ok) {
-                    const user = await res.json();
+                    const response = await res.json();
+
+                    const user = response.data;
                     card.innerHTML = `
                     <img
                         src="${user.avatarUrl || "https://avatars.githubusercontent.com/u/583231?v=4"}"
@@ -500,10 +533,6 @@
             startInput.addEventListener("change", saveDnd);
             endInput.addEventListener("change", saveDnd);
         }
-
-        // ─────────────────────────────────────────────────────────────────────────────
-        // Reminders & Notifications
-        // ─────────────────────────────────────────────────────────────────────────────
 
         async function setupReminders() {
             const bellBtn = document.getElementById("bell-btn");
@@ -778,195 +807,6 @@
         async function refreshAllReminders() {
             await updateRemindersUI();
             await updateDashboardReminders();
-        }
-
-        // ─────────────────────────────────────────────────────────────────────────────
-        // Trending Shares & API Integration (Merged from Explore2)
-        // ─────────────────────────────────────────────────────────────────────────────
-
-        async function loadTrendingData(append = false) {
-            if (!timeFilterSelect || !trendingContainer || !loadMoreBtn) return;
-
-            const filterValue = timeFilterSelect.value;
-            const today = new Date();
-            const clientToday = today.toLocaleDateString('en-CA');
-
-            if (!append) {
-                trendingContainer.innerHTML = `<p class="text-sm text-[#6e7681] text-center py-4">Đang tải dữ liệu...</p>`;
-            } else {
-                loadMoreBtn.innerHTML = "Đang tải...";
-                loadMoreBtn.disabled = true;
-            }
-
-            try {
-                const url = `/api/ranking/trending?timeframe=${filterValue}&limit=${takeLimit}&skip=${currentSkip}&clientToday=${clientToday}`;
-                const response = await fetch(url, { method: 'GET' });
-
-                if (!response.ok) throw new Error("Lỗi API: " + response.status);
-
-                const rawShares = await response.json();
-
-                if (!append) {
-                    trendingContainer.innerHTML = '';
-                }
-
-                if (rawShares.length === 0 && !append) {
-                    trendingContainer.innerHTML = `<p class="text-sm text-[#6e7681] text-center py-8">Chưa có todolist nào lọt top trending trong khoảng thời gian này.</p>`;
-                    return;
-                }
-
-                const todolists = await Promise.all(rawShares.map(async (item) => {
-                    const shareId = item.id || item.Id;
-                    let fetchedTodos = [];
-
-                    try {
-                        const todoRes = await fetch(`/api/todos/share/${shareId}`);
-                        if (todoRes.ok) {
-                            fetchedTodos = await todoRes.json();
-                        }
-                    } catch (err) {
-                        console.error(`Lỗi khi lấy Todo cho ShareId ${shareId}:`, err);
-                    }
-
-                    return {
-                        shareId: shareId,
-                        username: item.username || item.Username || `User_${item.userId || item.UserId}`,
-                        title: item.title || item.Title,
-                        totalStars: item.totalStars || item.TotalStars,
-                        category: item.category || 'General',
-                        usesCount: item.usesCount || 0,
-                        shareCode: item.shareCode || item.ShareCode,
-                        targetDate: item.targetDate || item.TargetDate,
-                        createdAt: item.createdAt || item.CreatedAt,
-                        todos: fetchedTodos
-                    };
-                }));
-
-                todolists.forEach(mappedItem => {
-                    const cardHtml = createCardTemplate(mappedItem);
-                    trendingContainer.insertAdjacentHTML('beforeend', cardHtml);
-                });
-
-                if (rawShares.length < takeLimit) {
-                    loadMoreBtn.classList.add('hidden');
-                } else {
-                    loadMoreBtn.classList.remove('hidden');
-                    loadMoreBtn.disabled = false;
-                    loadMoreBtn.innerHTML = `Xem thêm trending todolists
-                <svg height="14" viewBox="0 0 16 16" width="14" class="fill-[#58a6ff] inline-block ml-1" aria-hidden="true"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>`;
-                }
-
-            } catch (error) {
-                console.error("Lỗi khi fetch trending data:", error);
-                if (!append) {
-                    trendingContainer.innerHTML = `<p class="text-sm text-[#f85149] py-4">Đã xảy ra lỗi khi tải danh sách trending. Vui lòng thử lại sau.</p>`;
-                } else {
-                    loadMoreBtn.disabled = false;
-                    loadMoreBtn.innerHTML = "Thử lại";
-                }
-            }
-        }
-
-        function createCardTemplate(item) {
-            const title = item.title || 'Untitled';
-            const targetDateStr = item.targetDate ? new Date(item.targetDate).toLocaleDateString('vi-VN') : 'N/A';
-            const createdAtStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('vi-VN') : 'N/A';
-
-            let todosHtml = '';
-            if (item.todos && item.todos.length > 0) {
-                todosHtml = item.todos.map(todo => {
-                    const todoTitle = todo.title || todo.Title || 'Untitled Task';
-                    const icon = `<span class="mr-2 text-[#8b949e] flex-shrink-0">-</span>`;
-                    const textClass = 'text-[#c9d1d9]';
-                    return `
-                <li class="flex items-start gap-2">
-                    ${icon}
-                    <span class="text-sm ${textClass}">${todoTitle}</span>
-                </li>
-            `;
-                }).join('');
-            } else {
-                todosHtml = `<li class="text-sm text-[#6e7681] italic">Không có công việc nào trong danh sách này.</li>`;
-            }
-
-            return `
-          <article class="bg-[#161b22] border border-[#30363d] rounded-md p-5">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div class="flex items-center gap-2">
-                <svg height="16" viewBox="0 0 16 16" width="16" class="fill-[#6e7681] flex-shrink-0" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
-                <a href="/share/${item.shareId}" class="text-[#58a6ff] font-semibold hover:underline">${item.username} / ${title}</a>
-              </div>
-              <button onclick="toggleStarEffect(event, ${item.shareId})" class="flex items-center gap-1 border border-[#30363d] rounded-md px-2 py-1 text-xs text-[#c9d1d9] hover:border-[#c9d1d9] flex-shrink-0 transition-colors">
-                <svg height="12" viewBox="0 0 16 16" width="12" class="fill-current text-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-                <span class="star-text">Star</span>
-              </button>
-            </div>
-
-            <div class="text-sm text-[#8b949e] mb-3">
-              Mục tiêu: <span class="text-[#c9d1d9]">${targetDateStr}</span> • Đã tạo: <span class="text-[#c9d1d9]">${createdAtStr}</span>
-            </div>
-
-            <div class="mb-4 bg-[#0d1117] border border-[#30363d] rounded-md p-3 max-h-48 overflow-y-auto">
-                <ul class="space-y-1.5">
-                    ${todosHtml}
-                </ul>
-            </div>
-
-            <div class="flex items-center gap-4 text-xs text-[#6e7681]">
-              <span class="flex items-center gap-1">
-                <span class="w-3 h-3 rounded-full bg-[#39d353] inline-block"></span>
-                ${item.category || 'General'}
-              </span>
-              <span class="flex items-center gap-1 hover:text-[#58a6ff] cursor-pointer">
-                <svg height="12" viewBox="0 0 16 16" width="12" class="fill-[#6e7681]" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
-                <span class="star-count">${item.totalStars || 0}</span>
-              </span>
-              <span>${item.usesCount || 0} lượt dùng</span>
-              <span class="bg-[#21262d] px-2 py-0.5 rounded text-[#c9d1d9] border border-[#30363d]">Share code: <span class="font-mono text-[#58a6ff]">${item.shareCode || 'N/A'}</span></span>
-            </div>
-          </article>
-        `;
-        }
-
-        window.toggleStarEffect = async function (event, shareId) {
-            const btn = event.currentTarget;
-            const isStarred = btn.classList.contains('starred');
-
-            const article = btn.closest('article');
-            const starCountElement = article.querySelector('.star-count');
-            let currentStars = parseInt(starCountElement.innerText);
-
-            if (isStarred) {
-                btn.classList.remove('starred');
-                btn.querySelector('svg').classList.replace('text-[#e3b341]', 'text-[#6e7681]');
-                btn.querySelector('.star-text').innerText = 'Star';
-                starCountElement.innerText = currentStars - 1;
-            } else {
-                btn.classList.add('starred');
-                btn.querySelector('svg').classList.replace('text-[#6e7681]', 'text-[#e3b341]');
-                btn.querySelector('.star-text').innerText = 'Starred';
-                starCountElement.innerText = currentStars + 1;
-            }
-
-            try {
-                const res = await fetch(`/api/ranking/toggle-star/${shareId}`, { method: 'POST' });
-                if (!res.ok) {
-                    throw new Error("API lỗi");
-                }
-            } catch (error) {
-                alert("Đã xảy ra lỗi khi thả sao!");
-                if (isStarred) {
-                    btn.classList.add('starred');
-                    btn.querySelector('svg').classList.replace('text-[#6e7681]', 'text-[#e3b341]');
-                    btn.querySelector('.star-text').innerText = 'Starred';
-                    starCountElement.innerText = currentStars;
-                } else {
-                    btn.classList.remove('starred');
-                    btn.querySelector('svg').classList.replace('text-[#e3b341]', 'text-[#6e7681]');
-                    btn.querySelector('.star-text').innerText = 'Star';
-                    starCountElement.innerText = currentStars;
-                }
-            }
         }
     </script>
 </body>
