@@ -1,0 +1,19 @@
+services:
+  streakhub-api:
+    image: streakhub-api:latest
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: streakhub
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__DefaultConnection: ${DB_CONNECTION}
+      SmtpSettings__Password: ${SMTP_PASSWORD}
+
+    restart: unless-stopped

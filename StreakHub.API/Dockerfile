@@ -1,0 +1,27 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
+
+WORKDIR /src
+
+COPY StreakHub.API.csproj .
+
+RUN dotnet restore
+
+COPY . .
+
+RUN dotnet publish -c Release -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview
+
+WORKDIR /app
+
+LABEL maintainer="Le Thanh Viet Anh"
+LABEL project="StreakHub"
+LABEL version="1.0"
+
+COPY --from=build /app/publish .
+
+ENV ASPNETCORE_HTTP_PORTS=8080
+
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet","StreakHub.API.dll"]
